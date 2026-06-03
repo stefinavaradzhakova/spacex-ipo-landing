@@ -84,7 +84,9 @@ window.addEventListener('load', () => {
         document.querySelectorAll('.float-card').forEach((c) => c.classList.add('in-view'));
       },
     }, '-=0.5')
-    .from('.moon-toggle-wrap', { y: 20, opacity: 0, duration: 0.35 }, '-=0.3');
+    .from('.moon-mini-toggle-wrap', { y: 10, opacity: 0, duration: 0.3 }, '-=0.35')
+    .from('.moon-rotation-hint', { y: 10, opacity: 0, duration: 0.3 }, '-=0.25')
+    .from('.moon-cta-wrap', { y: 20, opacity: 0, duration: 0.4 }, '-=0.25');
 
   gsap.utils.toArray('.reveal').forEach((el) => {
     gsap.to(el, {
@@ -126,5 +128,16 @@ window.addEventListener('load', () => {
     });
   }
 
-  segs.forEach((s) => s.addEventListener('click', () => setSide(s.dataset.side)));
+  segs.forEach((s) => s.addEventListener('click', (e) => {
+    e.stopPropagation();
+    setSide(s.dataset.side);
+  }));
+
+  // Clicking/tapping the Moon itself toggles between the two states.
+  const moonHit = document.getElementById('moonContainer');
+  if (moonHit) {
+    moonHit.addEventListener('click', () => {
+      setSide(stage.classList.contains('is-dark') ? 'bright' : 'dark');
+    });
+  }
 })();

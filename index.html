@@ -50,14 +50,14 @@
   }
   </script>
 
-  <link rel="stylesheet" href="styles.css?v=11" />
+  <link rel="stylesheet" href="styles.css?v=22" />
 </head>
 <body class="bg-brand-dark text-white antialiased overflow-x-hidden">
 
-  <!-- NAV — centered logo + language switcher (right) -->
+  <!-- NAV — logo (left) + language switcher (right) -->
   <nav id="nav" class="fixed top-0 left-0 right-0 z-50 transition-colors duration-300">
-    <div class="max-w-7xl mx-auto px-6 py-4 relative flex items-center justify-end">
-      <a href="#" class="logo flex items-center absolute left-1/2 -translate-x-1/2">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="#" class="logo flex items-center">
         <img src="assets/Group%20430.svg" alt="Digital Spearhead" class="logo-img" />
       </a>
       <div class="lang-switcher" role="group" aria-label="Language">
@@ -70,7 +70,7 @@
   </nav>
 
   <!-- HERO -->
-  <section class="hero relative min-h-screen flex flex-col items-center justify-center overflow-hidden pt-28 pb-20">
+  <section class="hero relative min-h-screen flex flex-col items-center justify-center overflow-hidden pt-28 pb-6">
     <canvas id="starfield" class="absolute inset-0 w-full h-full"></canvas>
     <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[900px] bg-brand-blue/5 rounded-full blur-3xl pointer-events-none"></div>
 
@@ -86,9 +86,6 @@
       <!-- 3D MOON — rendered via Three.js into this container -->
       <div id="moonContainer" class="moon-3d-container" aria-hidden="true"></div>
       <div class="float-card card-1">
-        <div class="card-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-        </div>
         <div class="card-body">
           <span class="card-eyebrow bright-only">Bright side</span>
           <span class="card-eyebrow dark-only">Dark side</span>
@@ -97,9 +94,6 @@
         </div>
       </div>
       <div class="float-card card-2">
-        <div class="card-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12.5C2 9.46 4.46 7 7.5 7M2 17c0-5.52 4.48-10 10-10M5 19a2 2 0 1 1-4 0 2 2 0 0 1 4 0z"/><path d="M14 14l7 7M16 11l5 5M18 8l3 3"/></svg>
-        </div>
         <div class="card-body">
           <span class="card-eyebrow bright-only">Bright side</span>
           <span class="card-eyebrow dark-only">Dark side</span>
@@ -108,9 +102,6 @@
         </div>
       </div>
       <div class="float-card card-3">
-        <div class="card-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
-        </div>
         <div class="card-body">
           <span class="card-eyebrow bright-only">Bright side</span>
           <span class="card-eyebrow dark-only">Dark side</span>
@@ -119,9 +110,6 @@
         </div>
       </div>
       <div class="float-card card-4">
-        <div class="card-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>
-        </div>
         <div class="card-body">
           <span class="card-eyebrow bright-only">Bright side</span>
           <span class="card-eyebrow dark-only">Dark side</span>
@@ -130,9 +118,6 @@
         </div>
       </div>
       <div class="float-card card-5">
-        <div class="card-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-        </div>
         <div class="card-body">
           <span class="card-eyebrow bright-only">Bright side</span>
           <span class="card-eyebrow dark-only">Dark side</span>
@@ -141,19 +126,33 @@
         </div>
       </div>
 
-      <!-- Pill toggle: Light side / Dark side -->
-      <div class="moon-toggle-wrap">
-        <div id="moonToggle" class="seg-toggle" role="tablist" aria-label="Choose side">
-          <button type="button" class="seg-btn active" data-side="bright" role="tab" aria-selected="true">Light side</button>
-          <button type="button" class="seg-btn" data-side="dark" role="tab" aria-selected="false">Dark side</button>
+      <!-- Mini toggle: positioned directly over the Moon, shows current state -->
+      <div class="moon-mini-toggle-wrap">
+        <div id="moonToggle" class="seg-toggle seg-toggle--mini" role="tablist" aria-label="Choose side">
+          <button type="button" class="seg-btn active" data-side="bright" role="tab" aria-selected="true">Light</button>
+          <button type="button" class="seg-btn" data-side="dark" role="tab" aria-selected="false">Dark</button>
           <div class="seg-thumb" aria-hidden="true"></div>
         </div>
       </div>
+
+      <!-- 360° rotation hint — small white icon below the Moon (static) -->
+      <div class="moon-rotation-hint" aria-hidden="true">
+        <svg viewBox="0 0 127 127" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M52.9166 82.0208L63.5 92.6041L52.9166 103.187" stroke="#ffffff" stroke-width="10.5833" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M84.6667 90.4028C103.357 86.3203 116.417 76.9938 116.417 66.1458C116.417 51.5329 92.7259 39.6875 63.5 39.6875C34.2741 39.6875 10.5833 51.5329 10.5833 66.1458C10.5833 80.7588 34.2741 92.6042 63.5 92.6042" stroke="#ffffff" stroke-width="10.5833" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+
+      <!-- Register Now CTA — replaces the old toggle area -->
+      <div class="moon-cta-wrap">
+        <a href="#register" class="cta-button cta-launch moon-cta-button">Register now</a>
+      </div>
     </div>
 
-    <!-- Below the moon copy -->
-    <div class="relative z-10 max-w-3xl mx-auto px-6 mt-4 text-center reveal">
-      <p class="text-lg sm:text-xl text-white/80 leading-relaxed font-medium">
+    <!-- Below the moon copy — secondary supporting tagline (muted).
+         Pops in shortly after the Register button entrance finishes. -->
+    <div class="hero-tagline relative z-10 max-w-2xl mx-auto px-6 -mt-16 text-center">
+      <p class="text-sm sm:text-base text-white/45 leading-relaxed font-normal">
         Through online trading you can profit either way the IPO goes.
       </p>
     </div>
@@ -167,7 +166,7 @@
     <div class="max-w-7xl mx-auto relative">
       <div class="reveal text-center mx-auto max-w-3xl">
         <div class="section-focal"></div>
-        <h2 class="font-display text-4xl sm:text-5xl font-bold leading-tight text-white">What is an IPO?</h2>
+        <h2 class="font-display text-4xl sm:text-5xl font-bold leading-tight text-white">What is an <span class="text-brand-blue-light">IPO</span>?</h2>
         <p class="mt-6 text-lg text-white/80 leading-relaxed">
           An IPO is when a private company sells shares to the public for the first time. It can create hype, volatility, and new market opportunities — but also risk.
         </p>
@@ -306,9 +305,6 @@
         </div>
       </div>
 
-      <div class="mt-16 text-center reveal">
-        <a href="#register" class="cta-button">Register now</a>
-      </div>
     </div>
   </section>
 
@@ -473,6 +469,10 @@
         </article>
       </div>
 
+      <div class="mt-16 text-center reveal">
+        <a href="#register" class="cta-button">Register now</a>
+      </div>
+
     </div>
   </section>
 
@@ -533,28 +533,6 @@
     </div>
   </section>
 
-  <!-- ============================================================
-       06 — LAUNCH SEQUENCE (Final CTA)
-       ============================================================ -->
-  <section id="register" class="section-darker section-tech relative py-36 px-6 overflow-hidden">
-    <div class="scanner-bg">
-      <div class="scanner-ring r-1"></div>
-      <div class="scanner-ring r-2"></div>
-      <div class="scanner-ring r-3"></div>
-      <div class="scanner-ring r-4"></div>
-    </div>
-    <div class="grid-bg"></div>
-
-    <div class="relative max-w-3xl mx-auto text-center reveal">
-      <h2 class="font-display text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight text-white">Ready to take your first step?</h2>
-      <p class="mt-6 text-lg text-white/75">Register now and prepare your strategy before the IPO crowd moves.</p>
-
-      <div class="mt-12">
-        <a href="#" class="cta-button cta-launch">Register now</a>
-      </div>
-    </div>
-  </section>
-
   <!-- FOOTER -->
   <footer class="bg-brand-dark border-t border-white/5 pt-12 pb-10 px-6 text-white/50">
     <div class="max-w-7xl mx-auto">
@@ -583,7 +561,7 @@
     <a href="#register" class="cta-button cta-button-sm">Register now</a>
   </div>
 
-  <script src="script.js"></script>
+  <script src="script.js?v=12"></script>
 
   <!-- 3D MOON — Three.js loader + light/dark rotation -->
   <script type="module">
@@ -687,17 +665,17 @@
         (err) => console.warn('moon.glb failed to load:', err)
       );
 
-      // Toggle hookup — switch target settings on click
-      document.querySelectorAll('.seg-btn').forEach((btn) => {
-        btn.addEventListener('click', () => {
-          target = SETTINGS[btn.dataset.side === 'dark' ? 'dark' : 'bright'];
-        });
-      });
+      // Toggle is driven by the moon-stage class (set by setSide() in script.js,
+      // also flipped by clicking the moon itself). Three.js reads it each frame.
+      const stageEl = document.getElementById('moonStage');
 
       // Animation loop — lerp sun, ambient, emissive, rotation together
       const start = performance.now();
       function tick(now) {
         requestAnimationFrame(tick);
+
+        // Read current state from the stage class each frame (cheap)
+        target = stageEl && stageEl.classList.contains('is-dark') ? SETTINGS.dark : SETTINGS.bright;
 
         sun.position.lerp(target.sunPos, 0.14);
         sun.intensity += (target.sunIntensity - sun.intensity) * 0.14;
@@ -713,7 +691,7 @@
             }
           });
           const t = (now - start) * 0.001;
-          moon.position.y = Math.sin(t * 0.8) * 0.04;
+          moon.position.y = Math.sin(t * 0.7) * 0.012;
         }
         renderer.render(scene, camera);
       }

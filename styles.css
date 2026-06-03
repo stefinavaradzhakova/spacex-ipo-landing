@@ -96,17 +96,22 @@ body::after {
 }
 .nav-link:hover { color: var(--brand-blue-light); }
 
-/* Language switcher (nav, right side) */
+/* Language switcher (nav, right side) — neon frame */
 .lang-switcher {
   display: inline-flex;
   align-items: center;
   gap: 2px;
   padding: 4px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(8, 18, 32, 0.55);
+  border: 1.5px solid rgba(91, 186, 230, 0.55);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
+  box-shadow:
+    0 0 8px rgba(91, 186, 230, 0.35),
+    0 0 18px rgba(91, 186, 230, 0.15),
+    inset 0 0 10px rgba(91, 186, 230, 0.1),
+    inset 0 0 2px rgba(91, 186, 230, 0.35);
 }
 .lang-btn {
   appearance: none;
@@ -125,9 +130,12 @@ body::after {
   background: rgba(255, 255, 255, 0.06);
 }
 .lang-btn.is-active {
-  background: var(--brand-blue, #0091D9);
+  background: rgba(91, 186, 230, 0.18);
   color: #fff;
-  box-shadow: 0 2px 8px rgba(0, 145, 217, 0.35);
+  border: 1px solid rgba(91, 186, 230, 0.85);
+  box-shadow:
+    0 0 8px rgba(91, 186, 230, 0.65),
+    inset 0 0 6px rgba(91, 186, 230, 0.3);
   cursor: default;
 }
 .lang-btn.is-soon {
@@ -272,7 +280,8 @@ body::after {
   width: 700px;
   height: 700px;
   z-index: 1;
-  pointer-events: none;
+  pointer-events: auto;
+  cursor: pointer;
   transition: filter 0.45s ease;
 }
 
@@ -319,25 +328,6 @@ body::after {
   display: flex;
   align-items: center;
   gap: 12px;
-}
-.card-icon {
-  flex-shrink: 0;
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 2px;
-  background: rgba(91, 186, 230, 0.10);
-  border: 1px solid rgba(91, 186, 230, 0.25);
-  color: var(--brand-blue-light);
-  transition: background 0.6s ease, border-color 0.6s ease, color 0.6s ease;
-}
-.card-icon svg { width: 18px; height: 18px; display: block; }
-.moon-stage.is-bright .card-icon {
-  background: rgba(240, 235, 200, 0.10);
-  border-color: rgba(240, 235, 200, 0.30);
-  color: var(--brand-beam);
 }
 .card-body { flex: 1; min-width: 0; }
 
@@ -398,29 +388,220 @@ body::after {
 .float-card.in-view.card-5 { animation: cardFloat2 7.5s ease-in-out infinite; animation-delay: 0.8s; }
 
 /* =================================================================
-   MOON TOGGLE
+   MOON TOGGLE — mini, positioned directly over the Moon
    ================================================================= */
-.moon-toggle-wrap {
+.moon-mini-toggle-wrap {
   position: absolute;
-  bottom: 90px;
+  top: 1.5%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 12;
+}
+
+/* 360° rotation hint — small white icon, no background, sits just under the Moon (static) */
+.moon-rotation-hint {
+  position: absolute;
+  bottom: 200px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 8;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.moon-rotation-hint svg {
+  width: 28px;
+  height: 28px;
+  display: block;
+  opacity: 0.85;
+}
+
+/* Register Now CTA — sits inside the moon-stage, lifted higher so the
+   tagline below has breathing room. (Mobile rule below overrides this
+   to a fixed sticky bar.) */
+.moon-cta-wrap {
+  position: absolute;
+  bottom: 100px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 10;
 }
+.moon-cta-button {
+  font-size: 15px;
+  padding: 18px 56px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+/* =================================================================
+   MOON SECTION — MOBILE: stack moon → arrow → cards in flow,
+   Register CTA becomes a fixed sticky bar at the viewport bottom.
+   ================================================================= */
+@media (max-width: 768px) {
+  /* Compact spacing — tighter, balanced rhythm */
+  .moon-stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: auto;
+    padding: 8px 16px 16px;
+    gap: 10px;
+  }
 
-/* Pill-shaped Light/Dark toggle */
+  /* Mini toggle first */
+  .moon-mini-toggle-wrap {
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+    order: 1;
+    margin: 0 auto;
+  }
+
+  /* Moon second */
+  .moon-3d-container {
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+    width: 280px;
+    height: 280px;
+    order: 2;
+    margin: 0 auto;
+  }
+
+  /* Arrow third — directly under the moon */
+  .moon-rotation-hint {
+    position: relative;
+    bottom: auto;
+    left: auto;
+    transform: none;
+    order: 3;
+    margin: 0 auto;
+  }
+  .moon-rotation-hint svg { width: 22px; height: 22px; }
+
+  /* Float cards fourth — stacked vertically, full-width, compact */
+  .float-card {
+    position: relative;
+    top: auto;
+    left: auto;
+    right: auto;
+    width: 100%;
+    max-width: 340px;
+    margin: 0 auto;
+    padding: 12px 14px;
+    opacity: 1;
+    transform: none;
+    animation: none !important;
+    order: 4;
+  }
+  .float-card.in-view.card-1,
+  .float-card.in-view.card-2,
+  .float-card.in-view.card-3,
+  .float-card.in-view.card-4,
+  .float-card.in-view.card-5 {
+    animation: none !important;
+  }
+
+  /* Sticky Register CTA — fixed at viewport bottom, ~full width with 30px gutters */
+  .moon-cta-wrap {
+    position: fixed;
+    bottom: 16px;
+    left: 30px;
+    right: 30px;
+    transform: none;
+    z-index: 60;
+    margin: 0;
+    order: 5;
+  }
+  /* Override the neon-cyan look for the sticky button only:
+     dark black bg + thin white border + subtle white sparkle/glow.
+     Specificity bumped via .cta-button.moon-cta-button so this wins
+     over the base .cta-button rule which is later in source order. */
+  .cta-button.moon-cta-button {
+    display: block;
+    width: 100%;
+    text-align: center;
+    font-size: 14px;
+    padding: 17px 24px;
+    border-radius: 14px;
+    background: rgba(0, 0, 0, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.85);
+    color: #fff;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    animation: ctaSparkle 3.2s ease-in-out infinite;
+  }
+  .cta-button.moon-cta-button:hover {
+    background: rgba(10, 10, 10, 0.92);
+    border-color: #fff;
+    transform: none;
+  }
+
+  /* Make room at the bottom of the page so the fixed CTA doesn't sit on top of
+     real content (e.g., footer / register section bottom). */
+  body { padding-bottom: 88px; }
+}
+
+/* Hero tagline — pops in after the Register button entrance finishes
+   (GSAP hero timeline ends ~1.85s; we delay 2.05s for clear sequencing). */
+.hero-tagline {
+  opacity: 0;
+  transform: translateY(14px);
+  animation: heroTaglinePop 0.55s cubic-bezier(.2, .8, .3, 1) 2.05s forwards;
+}
+@keyframes heroTaglinePop {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-tagline {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+}
+
+/* Sticky CTA sparkle — soft white glow that gently pulses, layered to feel like
+   ambient sparkle rather than a flat shadow. */
+@keyframes ctaSparkle {
+  0%, 100% {
+    box-shadow:
+      0 0 10px rgba(255, 255, 255, 0.16),
+      0 0 28px rgba(255, 255, 255, 0.08),
+      inset 0 0 8px rgba(255, 255, 255, 0.04),
+      0 8px 26px rgba(0, 0, 0, 0.55);
+  }
+  50% {
+    box-shadow:
+      0 0 16px rgba(255, 255, 255, 0.30),
+      0 0 44px rgba(255, 255, 255, 0.15),
+      inset 0 0 12px rgba(255, 255, 255, 0.09),
+      0 8px 26px rgba(0, 0, 0, 0.55);
+  }
+}
+
+/* Pill-shaped Light/Dark toggle — neon frame */
 .seg-toggle {
   position: relative;
   display: inline-flex;
   align-items: stretch;
   padding: 5px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 2px;
+  background: rgba(8, 18, 32, 0.55);
+  border: 1.5px solid rgba(91, 186, 230, 0.6);
+  border-radius: 14px;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   isolation: isolate;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  box-shadow:
+    0 0 10px rgba(91, 186, 230, 0.4),
+    0 0 22px rgba(91, 186, 230, 0.2),
+    inset 0 0 12px rgba(91, 186, 230, 0.12),
+    inset 0 0 2px rgba(91, 186, 230, 0.4);
 }
 .seg-btn {
   position: relative;
@@ -449,23 +630,50 @@ body::after {
   font-weight: 700;
 }
 
-/* Sliding solid pill behind the active option — black */
+/* Sliding neon pill behind the active option */
 .seg-thumb {
   position: absolute;
   top: 5px;
   bottom: 5px;
   left: 5px;
   width: calc(50% - 5px);
-  border-radius: 2px;
-  background: #000;
+  border-radius: 10px;
+  background: rgba(91, 186, 230, 0.18);
+  border: 1px solid rgba(91, 186, 230, 0.85);
   box-shadow:
-    0 4px 16px rgba(0, 0, 0, 0.55),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    0 0 14px rgba(91, 186, 230, 0.7),
+    0 0 28px rgba(91, 186, 230, 0.3),
+    inset 0 0 10px rgba(91, 186, 230, 0.3);
   transition: transform 0.35s cubic-bezier(.7, .1, .3, 1);
   z-index: 0;
   pointer-events: none;
 }
 .seg-toggle:has(.seg-btn[data-side="dark"].active) .seg-thumb { transform: translateX(100%); }
+
+/* Mini variant — sits directly over the Moon */
+.seg-toggle--mini {
+  padding: 3px;
+  border-radius: 11px;
+  /* Inherits neon frame from .seg-toggle; tighten glow slightly for smaller surface */
+  box-shadow:
+    0 0 8px rgba(91, 186, 230, 0.45),
+    0 0 18px rgba(91, 186, 230, 0.22),
+    inset 0 0 10px rgba(91, 186, 230, 0.14),
+    inset 0 0 2px rgba(91, 186, 230, 0.45);
+}
+.seg-toggle--mini .seg-btn {
+  min-width: 68px;
+  padding: 7px 14px;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+}
+.seg-toggle--mini .seg-thumb {
+  top: 3px;
+  bottom: 3px;
+  left: 3px;
+  width: calc(50% - 3px);
+  border-radius: 8px;
+}
 
 /* =================================================================
    STAT CARD (dark)
@@ -581,8 +789,8 @@ body::after {
   align-items: center;
   justify-content: center;
   padding: 16px 36px;
-  border-radius: 2px;
-  background: var(--brand-blue);
+  border-radius: 14px;
+  background: rgba(8, 18, 32, 0.55);
   color: #fff;
   font-family: 'Inter', sans-serif;
   font-weight: 600;
@@ -591,26 +799,46 @@ body::after {
   text-transform: uppercase;
   text-decoration: none;
   cursor: pointer;
-  border: none;
-  box-shadow: 0 6px 20px rgba(0, 145, 217, 0.40);
-  transition: background 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+  border: 1.5px solid rgba(91, 186, 230, 0.75);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  box-shadow:
+    0 0 10px rgba(91, 186, 230, 0.45),
+    0 0 28px rgba(91, 186, 230, 0.22),
+    inset 0 0 14px rgba(91, 186, 230, 0.18),
+    inset 0 0 2px rgba(91, 186, 230, 0.5);
+  transition: box-shadow 0.25s ease, border-color 0.25s ease, transform 0.15s ease, background 0.25s ease;
   white-space: nowrap;
 }
 .cta-button:hover {
-  background: #0BA8F5;
+  border-color: rgba(149, 217, 255, 1);
+  background: rgba(91, 186, 230, 0.12);
   transform: translateY(-2px);
-  box-shadow: 0 10px 28px rgba(0, 145, 217, 0.55);
+  box-shadow:
+    0 0 18px rgba(91, 186, 230, 0.85),
+    0 0 52px rgba(91, 186, 230, 0.45),
+    inset 0 0 18px rgba(91, 186, 230, 0.28),
+    inset 0 0 3px rgba(149, 217, 255, 0.8);
 }
 .cta-button:active { transform: translateY(0); transition-duration: 0.1s; }
 
-/* Small variant for nav */
+/* Small variant for nav — tighter glow to match smaller surface */
 .cta-button-sm {
   padding: 9px 20px;
   font-size: 13px;
-  box-shadow: 0 4px 14px rgba(0, 145, 217, 0.35);
+  border-radius: 10px;
+  box-shadow:
+    0 0 8px rgba(91, 186, 230, 0.4),
+    0 0 18px rgba(91, 186, 230, 0.2),
+    inset 0 0 10px rgba(91, 186, 230, 0.14),
+    inset 0 0 2px rgba(91, 186, 230, 0.45);
 }
 .cta-button-sm:hover {
-  box-shadow: 0 7px 22px rgba(0, 145, 217, 0.50);
+  box-shadow:
+    0 0 14px rgba(91, 186, 230, 0.75),
+    0 0 32px rgba(91, 186, 230, 0.4),
+    inset 0 0 12px rgba(91, 186, 230, 0.25),
+    inset 0 0 3px rgba(149, 217, 255, 0.7);
 }
 
 /* Launch variant — larger for final CTA */
@@ -1758,35 +1986,6 @@ body::after {
   .panel-chart { height: 180px; }
 }
 
-/* =================================================================
-   RESPONSIVE — MOON STAGE
-   ================================================================= */
-@media (max-width: 900px) {
-  .moon-stage {
-    min-height: auto;
-    flex-direction: column;
-    padding-bottom: 60px;
-  }
-  .moon-wrapper {
-    width: 280px;
-    height: 280px;
-    margin: 0 auto;
-  }
-  .float-card {
-    position: relative !important;
-    inset: auto !important;
-    width: 100%;
-    max-width: 360px;
-    margin: 8px auto;
-    animation: none !important;
-  }
-  .moon-stage > .float-card { order: 2; }
-  .moon-stage .moon-wrapper { order: 1; margin-bottom: 24px; }
-  .moon-stage .moon-toggle-wrap {
-    order: 0;
-    position: relative;
-    bottom: auto; left: auto;
-    transform: none;
-    margin-bottom: 24px;
-  }
-}
+/* Old responsive moon-stage block was removed — its rules referenced
+   legacy classes (.moon-wrapper, .moon-toggle-wrap) and conflicted with
+   the new mobile stacking rules in the @media (max-width: 768px) block. */
