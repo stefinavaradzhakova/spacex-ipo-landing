@@ -1824,6 +1824,11 @@ body::after {
 /* =================================================================
    TESLA STAT — single polished card containing everything
    ================================================================= */
+/* Intro copy width matches the card below, so the column edges line up */
+.tesla-intro-copy {
+  max-width: 680px;
+}
+
 .tesla-stat-card {
   max-width: 680px;
   margin: 0 auto;
@@ -2357,28 +2362,53 @@ body::after {
 /* =================================================================
    RISK DISCLOSURE (footer)
    ================================================================= */
+/* Footer nav links — centered stack (no border) */
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  width: max-content;
+  max-width: 100%;
+  margin: 0 auto 22px;
+  padding: 8px 0;
+}
+.footer-link {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.82);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  text-decoration-color: rgba(255, 255, 255, 0.45);
+  transition: color 0.2s ease;
+}
+.footer-link:hover {
+  color: #ffffff;
+  text-decoration-color: #ffffff;
+}
+
+/* DSPH disclaimer — clean centered long-form note (no border lines) */
 .risk-disclosure {
-  padding: 18px 22px;
-  margin-bottom: 28px;
-  border-radius: 2px;
-  background: rgba(91, 186, 230, 0.04);
-  border: 1px solid rgba(91, 186, 230, 0.14);
-  border-left: 3px solid var(--brand-blue);
-  font-size: 12px;
-  line-height: 1.6;
-  color: rgba(255, 255, 255, 0.55);
+  padding: 8px 0 18px;
+  font-family: 'Inter', sans-serif;
+  font-size: 12.5px;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.68);
+  text-align: center;
+  max-width: 1100px;
+  margin: 0 auto 24px;
 }
-.risk-label {
-  display: block;
-  color: var(--brand-blue-light);
-  margin-bottom: 8px;
-  font-weight: 700;
+.risk-disclosure p { margin: 0; padding: 0 16px; }
+.risk-disclosure .footer-link {
+  font-size: inherit;
 }
-.risk-disclosure p { margin: 0; }
 
 .footer-row {
   padding-top: 24px;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  justify-content: center;
+  text-align: center;
 }
 
 /* =================================================================
