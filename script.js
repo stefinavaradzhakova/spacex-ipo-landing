@@ -1,5 +1,5 @@
 /* =================================================================
-   STARFIELD
+   STARFIELD — paused when hero is off-screen or tab is hidden
    ================================================================= */
 (function starfield() {
   const canvas = document.getElementById('starfield');
@@ -7,19 +7,25 @@
   const ctx = canvas.getContext('2d');
   let stars = [];
   let w, h, dpr;
+  let running = false;
+  let inView = true;
 
   function resize() {
-    dpr = window.devicePixelRatio || 1;
+    // Cap DPR — on 3× mobile screens, full DPR triples the per-frame fill cost.
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
     w = canvas.clientWidth;
     h = canvas.clientHeight;
     canvas.width = w * dpr;
     canvas.height = h * dpr;
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.scale(dpr, dpr);
     seed();
   }
 
   function seed() {
-    const count = Math.floor((w * h) / 6000);
+    // Lighter star density on small/low-DPR screens.
+    const density = w < 700 ? 9000 : 6000;
+    const count = Math.floor((w * h) / density);
     stars = Array.from({ length: count }, () => ({
       x: Math.random() * w,
       y: Math.random() * h,
@@ -32,6 +38,7 @@
 
   let t = 0;
   function draw() {
+    if (!running) return;
     ctx.clearRect(0, 0, w, h);
     t += 0.01;
     for (const s of stars) {
@@ -44,9 +51,32 @@
     requestAnimationFrame(draw);
   }
 
+  function start() {
+    if (running) return;
+    running = true;
+    requestAnimationFrame(draw);
+  }
+  function stop() { running = false; }
+
   window.addEventListener('resize', resize);
   resize();
-  draw();
+  start();
+
+  // Pause when the hero leaves the viewport.
+  if ('IntersectionObserver' in window) {
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        inView = e.isIntersecting;
+        if (inView && !document.hidden) start(); else stop();
+      });
+    }, { rootMargin: '100px' });
+    obs.observe(canvas);
+  }
+  // Pause when the tab is hidden.
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) stop();
+    else if (inView) start();
+  });
 })();
 
 /* =================================================================

@@ -422,7 +422,7 @@
     </div>
   </footer>
 
-  <script src="script.js?v=19"></script>
+  <script src="script.js?v=20"></script>
 
   <!-- 3D MOON — Three.js loader + light/dark rotation -->
   <script type="module">
@@ -437,7 +437,9 @@
       camera.position.z = 5;
 
       const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      // Cap DPR — on 3× phones, 2× still doubles the GPU fill cost; 1.5× on mobile is plenty.
+      const isMobile = window.matchMedia('(max-width: 768px)').matches;
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.5 : 2));
       // Tone mapping + exposure so emissive values above 1.0 actually push the moon
       // brighter on screen instead of clipping to flat white.
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -489,6 +491,7 @@
       };
 
       let moon = null;
+      let moonMeshes = [];        // Cached so tick() never walks the tree.
       let target = SETTINGS.bright;
       let currentY = 0;
 
@@ -506,7 +509,8 @@
           const center = box.getCenter(new THREE.Vector3()).multiplyScalar(scale);
           moon.position.sub(center);
           // Add the base texture as an emissive map so the lit side reads brighter,
-          // and render double-sided so backface-culled meshes still show.
+          // and cache the mesh refs once so the animation loop doesn't traverse
+          // the scene graph every frame.
           moon.traverse((child) => {
             if (child.isMesh && child.material) {
               const map = child.material.map;
@@ -517,9 +521,9 @@
               }
               child.material.side = THREE.DoubleSide;
               child.material.needsUpdate = true;
+              moonMeshes.push(child);
             }
           });
-          console.log('[moon] loaded', moon);
           scene.add(moon);
         },
         undefined,
@@ -530,9 +534,12 @@
       // also flipped by clicking the moon itself). Three.js reads it each frame.
       const stageEl = document.getElementById('moonStage');
 
-      // Animation loop — lerp sun, ambient, emissive, rotation together
+      // Animation loop — paused when off-screen or tab hidden.
+      let running = false;
+      let inView = true;
       const start = performance.now();
       function tick(now) {
+        if (!running) return;
         requestAnimationFrame(tick);
 
         // Read current state from the stage class each frame (cheap)
@@ -545,18 +552,35 @@
         if (moon) {
           currentY += (target.rotationY - currentY) * 0.14;
           moon.rotation.y = currentY;
-          moon.traverse((child) => {
-            if (child.isMesh && child.material) {
-              child.material.emissiveIntensity +=
-                (target.emissive - child.material.emissiveIntensity) * 0.14;
-            }
-          });
+          // Flat for-loop over the cached mesh list (no scene-graph traversal)
+          for (let i = 0; i < moonMeshes.length; i++) {
+            const m = moonMeshes[i].material;
+            m.emissiveIntensity += (target.emissive - m.emissiveIntensity) * 0.14;
+          }
           const t = (now - start) * 0.001;
           moon.position.y = Math.sin(t * 0.7) * 0.012;
         }
         renderer.render(scene, camera);
       }
-      requestAnimationFrame(tick);
+      function startTick() { if (!running) { running = true; requestAnimationFrame(tick); } }
+      function stopTick()  { running = false; }
+      startTick();
+
+      // Pause when moon-stage scrolls out of the viewport.
+      if ('IntersectionObserver' in window && stageEl) {
+        const obs = new IntersectionObserver((entries) => {
+          entries.forEach((e) => {
+            inView = e.isIntersecting;
+            if (inView && !document.hidden) startTick(); else stopTick();
+          });
+        }, { rootMargin: '100px' });
+        obs.observe(stageEl);
+      }
+      // Pause when the tab is hidden.
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) stopTick();
+        else if (inView) startTick();
+      });
     }
   </script>
 </body>
