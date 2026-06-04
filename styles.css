@@ -442,8 +442,8 @@ body::after {
 .moon-click-cue svg {
   position: relative;
   z-index: 2;
-  width: 42px;
-  height: 42px;
+  width: 64px;
+  height: 64px;
   display: block;
   transform-origin: center center;
   /* Pulse is driven by GSAP in script.js so it runs reliably across

@@ -71,25 +71,43 @@ window.addEventListener('load', () => {
   gsap.registerPlugin(ScrollTrigger);
 
   const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-  /* Top-to-bottom cascade. The order matches the mobile flex column
-     (headline → toggle → moon → arrow → cards → CTA) and also reads
-     correctly on desktop. */
-  tl.from('#badge', { y: 20, opacity: 0, duration: 0.35 })
-    .from('.hero-headline', { y: 40, opacity: 0, duration: 0.6 }, '-=0.2')
-    .from('.moon-mini-toggle-wrap', { y: 14, opacity: 0, duration: 0.35 }, '-=0.15')
-    .from('.moon-3d-container', { scale: 0.78, opacity: 0, duration: 0.65, ease: 'power2.out' }, '-=0.2')
-    .from('.moon-rotation-hint', { y: 10, opacity: 0, duration: 0.3 }, '-=0.15')
-    .to('.float-card', {
-      opacity: 1,
-      y: 0,
-      duration: 0.4,
-      stagger: 0.05,
-      ease: 'power2.out',
-      onComplete: () => {
-        document.querySelectorAll('.float-card').forEach((c) => c.classList.add('in-view'));
-      },
-    }, '-=0.15')
-    .from('.moon-cta-wrap > .cta-button', { y: 14, opacity: 0, duration: 0.4, clearProps: 'transform,opacity' }, '-=0.15');
+  /* Two simple groups:
+     1) headline + toggle fade-up together
+     2) moon, arrow, and float-cards animate in together
+     The Register CTA is intentionally NOT animated — it stays in its
+     final position the whole time. */
+
+  // Group 1 — headline + toggle, as one motion
+  tl.from(['.hero-headline', '.moon-mini-toggle-wrap'], {
+    y: 24,
+    opacity: 0,
+    duration: 0.55,
+    ease: 'power2.out',
+  });
+
+  // Group 2 — moon + arrow + bubbles, all together (starts as group 1 lands)
+  tl.from('.moon-3d-container', {
+    scale: 0.92,
+    opacity: 0,
+    duration: 0.6,
+    ease: 'power2.out',
+  }, '-=0.20');
+  tl.from('.moon-rotation-hint', {
+    y: 10,
+    opacity: 0,
+    duration: 0.45,
+    ease: 'power2.out',
+  }, '<');
+  tl.to('.float-card', {
+    opacity: 1,
+    y: 0,
+    duration: 0.55,
+    stagger: 0,
+    ease: 'power2.out',
+    onComplete: () => {
+      document.querySelectorAll('.float-card').forEach((c) => c.classList.add('in-view'));
+    },
+  }, '<');
 
   gsap.utils.toArray('.reveal').forEach((el) => {
     gsap.to(el, {
