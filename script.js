@@ -1,17 +1,15 @@
 /* =================================================================
-   STARFIELD — paused when hero is off-screen or tab is hidden
+   STARFIELD — static. Renders one frame on load (and on resize).
+   No animation loop, so zero per-frame CPU cost.
    ================================================================= */
 (function starfield() {
   const canvas = document.getElementById('starfield');
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
-  let stars = [];
   let w, h, dpr;
-  let running = false;
-  let inView = true;
 
-  function resize() {
-    // Cap DPR — on 3× mobile screens, full DPR triples the per-frame fill cost.
+  function paint() {
+    // Cap DPR — full DPR on 3× phones triples fill cost for no visible benefit on tiny dots.
     dpr = Math.min(window.devicePixelRatio || 1, 2);
     w = canvas.clientWidth;
     h = canvas.clientHeight;
@@ -19,63 +17,29 @@
     canvas.height = h * dpr;
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.scale(dpr, dpr);
-    seed();
-  }
 
-  function seed() {
-    // Lighter star density on small/low-DPR screens.
+    ctx.clearRect(0, 0, w, h);
+    // Lighter density on small screens.
     const density = w < 700 ? 9000 : 6000;
     const count = Math.floor((w * h) / density);
-    stars = Array.from({ length: count }, () => ({
-      x: Math.random() * w,
-      y: Math.random() * h,
-      r: Math.random() * 1.3 + 0.2,
-      a: Math.random() * 0.8 + 0.2,
-      twinkleSpeed: Math.random() * 0.015 + 0.003,
-      phase: Math.random() * Math.PI * 2,
-    }));
-  }
-
-  let t = 0;
-  function draw() {
-    if (!running) return;
-    ctx.clearRect(0, 0, w, h);
-    t += 0.01;
-    for (const s of stars) {
-      const alpha = s.a * (0.6 + 0.4 * Math.sin(t * s.twinkleSpeed * 100 + s.phase));
+    for (let i = 0; i < count; i++) {
+      const x = Math.random() * w;
+      const y = Math.random() * h;
+      const r = Math.random() * 1.3 + 0.2;
+      const a = Math.random() * 0.7 + 0.25;
       ctx.beginPath();
-      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+      ctx.arc(x, y, r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255, 255, 255, ${a})`;
       ctx.fill();
     }
-    requestAnimationFrame(draw);
   }
 
-  function start() {
-    if (running) return;
-    running = true;
-    requestAnimationFrame(draw);
-  }
-  function stop() { running = false; }
-
-  window.addEventListener('resize', resize);
-  resize();
-  start();
-
-  // Pause when the hero leaves the viewport.
-  if ('IntersectionObserver' in window) {
-    const obs = new IntersectionObserver((entries) => {
-      entries.forEach((e) => {
-        inView = e.isIntersecting;
-        if (inView && !document.hidden) start(); else stop();
-      });
-    }, { rootMargin: '100px' });
-    obs.observe(canvas);
-  }
-  // Pause when the tab is hidden.
-  document.addEventListener('visibilitychange', () => {
-    if (document.hidden) stop();
-    else if (inView) start();
+  paint();
+  // Re-paint on resize so the dots fill the new canvas dimensions.
+  let resizeTimer = 0;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(paint, 120);
   });
 })();
 

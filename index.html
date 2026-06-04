@@ -9,7 +9,9 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <!-- Trimmed: 5 font files instead of 12. Browser synthesizes intermediate
+       weights when needed (e.g., font-weight: 500 on Inter falls back to 400 or 600). -->
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Inter:wght@400;600&family=Space+Mono&display=swap" rel="stylesheet" />
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -50,7 +52,7 @@
   }
   </script>
 
-  <link rel="stylesheet" href="styles.css?v=59" />
+  <link rel="stylesheet" href="styles.css?v=60" />
 </head>
 <body class="bg-brand-dark text-white antialiased overflow-x-hidden">
 
@@ -422,7 +424,7 @@
     </div>
   </footer>
 
-  <script src="script.js?v=20"></script>
+  <script src="script.js?v=21"></script>
 
   <!-- 3D MOON — Three.js loader + light/dark rotation -->
   <script type="module">
@@ -557,8 +559,7 @@
             const m = moonMeshes[i].material;
             m.emissiveIntensity += (target.emissive - m.emissiveIntensity) * 0.14;
           }
-          const t = (now - start) * 0.001;
-          moon.position.y = Math.sin(t * 0.7) * 0.012;
+          // Moon stays still — no Y-bob.
         }
         renderer.render(scene, camera);
       }
