@@ -719,12 +719,13 @@ body::after {
 }
 .seg-toggle:has(.seg-btn[data-side="dark"].active) .seg-thumb { transform: translateX(100%); }
 
-/* Mini variant — sits directly over the Moon (light pill, no glow) */
+/* Mini variant — pill toggle over the Moon. Dark frosted frame so
+   white inactive text reads cleanly; white sliding thumb behind active. */
 .seg-toggle--mini {
   padding: 3px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.18);
-  border: 1px solid rgba(255, 255, 255, 0.30);
+  background: rgba(10, 14, 20, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.22);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   box-shadow: none;
@@ -735,11 +736,11 @@ body::after {
   font-size: 10px;
   letter-spacing: 0.14em;
   white-space: nowrap;
-  color: rgba(0, 0, 0, 0.65);
+  color: rgba(255, 255, 255, 0.78);
   border-radius: 999px;
 }
 .seg-toggle--mini .seg-btn:hover:not(.active) {
-  color: rgba(0, 0, 0, 0.9);
+  color: #ffffff;
 }
 .seg-toggle--mini .seg-btn.active {
   color: #000;
@@ -1106,6 +1107,34 @@ body::after {
   letter-spacing: 0.005em;
   line-height: 0.95 !important;
   text-wrap: balance;
+}
+
+/* Hero kicker — small orange pill announcing the topic, above the H1 */
+.hero-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0 auto 22px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: rgba(255, 156, 0, 0.10);
+  border: 1px solid rgba(255, 156, 0, 0.50);
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #FF9C00;
+}
+@media (min-width: 640px) {
+  .hero-kicker { font-size: 13px; }
+}
+.hero-kicker__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: #FF9C00;
+  box-shadow: 0 0 8px rgba(255, 156, 0, 0.85);
 }
 
 /* Blue + heavy accent inside the hero headline */
@@ -1533,10 +1562,11 @@ body::after {
 .scanner-ring.r-4 { animation: scannerPulse 7.5s ease-in-out infinite 1.2s; }
 
 /* Launch CTA variant */
+/* Big launch variant — same dimensions as the hero Register CTA */
 .cta-launch {
-  padding: 20px 48px;
-  font-size: 17px;
-  letter-spacing: 0.02em;
+  padding: 18px 56px;
+  font-size: 15px;
+  letter-spacing: 0.16em;
 }
 .cta-button .mono { font-size: 14px; }
 
@@ -1917,24 +1947,63 @@ body::after {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: 12px;
   margin-bottom: 26px;
 }
-.tc-card__ticker {
-  font-family: 'Space Mono', monospace;
-  font-size: 11px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.70);
-  padding: 4px 10px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 6px;
+
+/* Brand logo — actual ticker logo from parqet.com's free CDN
+   (the same source used by many trading apps). 32px round mark. */
+.tc-card__logo {
+  width: 32px;
+  height: 32px;
+  display: inline-block;
+  border-radius: 999px;
+  object-fit: cover;
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 0 18px color-mix(in srgb, var(--tc-brand, white) 30%, transparent);
 }
+
 .tc-card__name {
   font-family: 'Inter', sans-serif;
-  font-size: 14px;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.78);
+  font-size: 16px;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+}
+
+/* Brand colors per card */
+.tc-card[data-brand="amzn"] { --tc-brand: #FF9900; }
+.tc-card[data-brand="nvda"] { --tc-brand: #76B900; }
+.tc-card[data-brand="meta"] { --tc-brand: #0866FF; }
+
+/* Subtle brand-color accent stripe at the top of the card */
+.tc-card[data-brand]::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 16%;
+  right: 16%;
+  height: 2px;
+  background: var(--tc-brand);
+  border-radius: 0 0 2px 2px;
+  box-shadow: 0 0 14px var(--tc-brand);
+  opacity: 0.85;
+}
+
+/* The hero gain number adopts the brand color */
+.tc-card[data-brand] .tc-card__gain {
+  color: var(--tc-brand);
+  text-shadow: 0 0 50px color-mix(in srgb, var(--tc-brand) 30%, transparent);
+}
+
+/* And the arrow in the price row */
+.tc-card[data-brand] .tc-card__arrow {
+  color: var(--tc-brand);
+}
+
+/* Hover lifts in the brand color too */
+.tc-card[data-brand]:hover {
+  border-color: color-mix(in srgb, var(--tc-brand) 40%, rgba(255, 255, 255, 0.14));
 }
 
 .tc-card__stat {

@@ -52,7 +52,7 @@
   }
   </script>
 
-  <link rel="stylesheet" href="styles.css?v=60" />
+  <link rel="stylesheet" href="styles.css?v=64" />
 </head>
 <body class="bg-brand-dark text-white antialiased overflow-x-hidden">
 
@@ -71,6 +71,10 @@
     <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[900px] bg-brand-blue/5 rounded-full blur-3xl pointer-events-none"></div>
 
     <div class="relative z-10 max-w-5xl mx-auto px-6 text-center">
+      <span class="hero-kicker">
+        <span class="hero-kicker__dot" aria-hidden="true"></span>
+        SpaceX IPO
+      </span>
       <h1 class="hero-headline font-display text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.1] tracking-tight max-w-4xl mx-auto text-white">
         Through <span class="hero-accent">online trading</span> you can <span class="hero-accent">profit either way</span> the IPO goes
       </h1>
@@ -259,9 +263,9 @@
 
       <div class="grid md:grid-cols-3 gap-6">
         <!-- AMZN -->
-        <article class="reveal tc-card">
+        <article class="reveal tc-card" data-brand="amzn">
           <div class="tc-card__header">
-            <span class="tc-card__ticker">AMZN</span>
+            <img class="tc-card__logo" src="https://assets.parqet.com/logos/symbol/AMZN" alt="Amazon" loading="lazy" decoding="async" width="32" height="32" />
             <span class="tc-card__name">Amazon</span>
           </div>
           <div class="tc-card__stat">
@@ -285,13 +289,13 @@
         </article>
 
         <!-- NVDA -->
-        <article class="reveal tc-card">
+        <article class="reveal tc-card" data-brand="nvda">
           <div class="tc-card__header">
-            <span class="tc-card__ticker">NVDA</span>
+            <img class="tc-card__logo" src="https://assets.parqet.com/logos/symbol/NVDA" alt="Nvidia" loading="lazy" decoding="async" width="32" height="32" />
             <span class="tc-card__name">Nvidia</span>
           </div>
           <div class="tc-card__stat">
-            <div class="tc-card__gain">+7,817%</div>
+            <div class="tc-card__gain">+7&nbsp;817%</div>
             <div class="tc-card__gain-label">gain since IPO</div>
           </div>
           <div class="tc-card__divider" aria-hidden="true"></div>
@@ -311,13 +315,13 @@
         </article>
 
         <!-- META -->
-        <article class="reveal tc-card">
+        <article class="reveal tc-card" data-brand="meta">
           <div class="tc-card__header">
-            <span class="tc-card__ticker">META</span>
+            <img class="tc-card__logo" src="https://assets.parqet.com/logos/symbol/META" alt="Meta" loading="lazy" decoding="async" width="32" height="32" />
             <span class="tc-card__name">Meta</span>
           </div>
           <div class="tc-card__stat">
-            <div class="tc-card__gain">+1,216%</div>
+            <div class="tc-card__gain">+1&nbsp;216%</div>
             <div class="tc-card__gain-label">gain since IPO</div>
           </div>
           <div class="tc-card__divider" aria-hidden="true"></div>
@@ -338,7 +342,7 @@
       </div>
 
       <div class="mt-16 text-center reveal">
-        <a href="#register" class="cta-button">Register now</a>
+        <a href="#register" class="cta-button cta-launch">Register now</a>
       </div>
 
     </div>
