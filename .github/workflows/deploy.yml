@@ -1,0 +1,61 @@
+# Build the Astro site on GitHub's servers and publish it to GitHub Pages.
+# No local Node.js required — GitHub installs Node, runs `npm install` + `npm run build`,
+# and serves the resulting `dist/` folder.
+name: Deploy Astro site to Pages
+
+on:
+  push:
+    branches: [astro]   # Auto-deploy on every push to the astro branch
+  workflow_dispatch:    # Allow manual run from the Actions tab
+
+# Allow this workflow to deploy to Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One deploy at a time, but don't cancel in-progress runs (they finish cleanly)
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build Astro site
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci || npm install
+
+      - name: Build
+        run: npm run build
+        env:
+          # If you change the repo name, also change `base` in astro.config.mjs
+          # and the URL below.
+          PUBLIC_SITE: ${{ github.event.repository.html_url }}
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4

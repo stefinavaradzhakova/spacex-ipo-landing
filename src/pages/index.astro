@@ -1,0 +1,418 @@
+---
+// SpaceX IPO landing — Astro page
+// All `<style>` import calls happen at build time; nothing runtime.
+import '../styles/global.css';
+
+// Self-hosted fonts via @fontsource — replaces the render-blocking Google Fonts <link>.
+// Each import emits a CSS file that Astro bundles + inlines if small enough.
+import '@fontsource/inter/400.css';
+import '@fontsource/inter/600.css';
+import '@fontsource/inter/800.css';
+import '@fontsource/barlow-condensed/700.css';
+import '@fontsource/barlow-condensed/800.css';
+import '@fontsource/space-mono/400.css';
+
+// Astro resolves `${base}/foo` paths automatically when used in JSX. Asset URLs in
+// strings stay literal, so we prefix them with import.meta.env.BASE_URL.
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex" />
+    <title>Digital Spearhead — SpaceX IPO: Every story has a side they do not show you.</title>
+    <meta
+      name="description"
+      content="The SpaceX IPO has two sides. See both — and learn how to position yourself either way the listing goes."
+    />
+  </head>
+  <body class="bg-brand-dark text-white antialiased overflow-x-hidden">
+    <!-- NAV — logo only -->
+    <nav id="nav" class="fixed top-0 left-0 right-0 z-50 transition-colors duration-300">
+      <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+        <a href="#" class="logo flex items-center">
+          <img src={`${base}/assets/Group 430.svg`} alt="Digital Spearhead" class="logo-img" width="180" height="40" />
+        </a>
+      </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero relative min-h-screen flex flex-col items-center justify-start overflow-hidden pt-16 pb-6">
+      <canvas id="starfield" class="absolute inset-0 w-full h-full"></canvas>
+      <div
+        class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[900px] bg-brand-blue/5 rounded-full blur-3xl pointer-events-none"
+      ></div>
+
+      <div class="relative z-10 max-w-5xl mx-auto px-6 text-center">
+        <div class="hero-headline-stack">
+          <h1 class="hero-display">
+            <span class="hero-display__word hero-display__word--brand">SpaceX</span>
+            <span class="hero-display__word hero-display__word--accent">IPO</span>
+          </h1>
+          <p class="hero-subhead">
+            Through <span class="hero-accent">online trading</span> you can <span class="hero-accent">profit either way</span> the IPO goes
+          </p>
+        </div>
+      </div>
+
+      <!-- MOON STAGE -->
+      <div id="moonStage" class="moon-stage is-bright relative w-full max-w-6xl mx-auto px-6 mt-4">
+        <div id="moonContainer" class="moon-3d-container" aria-hidden="true">
+          <div class="moon-click-cue" aria-hidden="true">
+            <svg viewBox="0 0 1190 1190" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M396.667 644.583V223.125C396.667 203.4 404.502 184.482 418.45 170.534C432.399 156.586 451.316 148.75 471.042 148.75C490.767 148.75 509.685 156.586 523.633 170.534C537.581 184.482 545.417 203.4 545.417 223.125V595M545.417 570.208V471.042C545.417 451.316 553.252 432.399 567.2 418.451C581.149 404.503 600.066 396.667 619.792 396.667C639.517 396.667 658.435 404.503 672.383 418.451C686.331 432.399 694.167 451.316 694.167 471.042V595M694.167 520.625C694.167 500.9 702.002 481.982 715.95 468.034C729.898 454.086 748.816 446.25 768.542 446.25C788.267 446.25 807.185 454.086 821.133 468.034C835.081 481.982 842.917 500.9 842.917 520.625V595"
+                stroke="currentColor"
+                stroke-width="50"
+                stroke-linecap="round"
+                stroke-linejoin="round"></path>
+              <path
+                d="M842.917 570.208C842.917 550.483 850.753 531.565 864.701 517.617C878.649 503.669 897.566 495.833 917.292 495.833C937.017 495.833 955.935 503.669 969.883 517.617C983.831 531.565 991.667 550.483 991.667 570.208V793.333C991.667 872.235 960.323 947.906 904.531 1003.7C848.739 1059.49 773.069 1090.83 694.167 1090.83H595H605.313C556.044 1090.84 507.544 1078.61 464.169 1055.25C420.793 1031.88 383.9 998.106 356.802 956.958L347.083 942.083C331.613 918.349 277.303 823.678 184.152 658.07C174.655 641.188 172.118 621.267 177.081 602.544C182.044 583.821 194.116 567.773 210.729 557.812C228.432 547.221 249.161 542.835 269.637 545.349C290.113 547.864 309.165 557.135 323.779 571.696L396.667 644.583M247.917 148.75L198.333 99.1666M198.333 347.083H148.75M694.167 148.75L743.75 99.1666M743.75 297.5H793.333"
+                stroke="currentColor"
+                stroke-width="50"
+                stroke-linecap="round"
+                stroke-linejoin="round"></path>
+            </svg>
+          </div>
+        </div>
+
+        <div class="float-card card-1">
+          <div class="card-body">
+            <span class="card-text bright-only">Global brand attention</span>
+            <span class="card-text dark-only"><strong>IPO timing</strong> is still uncertain</span>
+          </div>
+        </div>
+        <div class="float-card card-2">
+          <div class="card-body">
+            <span class="card-text bright-only">Starlink adds <strong>revenue</strong> strength</span>
+            <span class="card-text dark-only"><strong>Valuation</strong> may already be stretched</span>
+          </div>
+        </div>
+        <div class="float-card card-3">
+          <div class="card-body">
+            <span class="card-text bright-only"><strong>Investor demand</strong> could be strong</span>
+            <span class="card-text dark-only">Launch and execution <strong>risk</strong> remain</span>
+          </div>
+        </div>
+        <div class="float-card card-4">
+          <div class="card-body">
+            <span class="card-text bright-only">Elon Musk drives <strong>market interest</strong></span>
+            <span class="card-text dark-only">Heavy <strong>capital</strong> needs can pressure <strong>returns</strong></span>
+          </div>
+        </div>
+        <div class="float-card card-5">
+          <div class="card-body">
+            <span class="card-text bright-only">Space + AI + satellites = powerful story</span>
+            <span class="card-text dark-only">Post-IPO <strong>volatility</strong> could be sharp</span>
+          </div>
+        </div>
+
+        <div class="moon-mini-toggle-wrap">
+          <p class="moon-toggle-hint">Every IPO story has a side they do not show you</p>
+          <div id="moonToggle" class="seg-toggle seg-toggle--mini" role="tablist" aria-label="Choose side">
+            <button type="button" class="seg-btn active" data-side="bright" role="tab" aria-selected="true">The obvious side</button>
+            <button type="button" class="seg-btn" data-side="dark" role="tab" aria-selected="false">The hidden side</button>
+            <div class="seg-thumb" aria-hidden="true"></div>
+          </div>
+        </div>
+
+        <div class="moon-rotation-hint" aria-hidden="true">
+          <svg viewBox="0 0 127 127" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M52.9166 82.0208L63.5 92.6041L52.9166 103.187" stroke="#ffffff" stroke-width="10.5833" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path
+              d="M84.6667 90.4028C103.357 86.3203 116.417 76.9938 116.417 66.1458C116.417 51.5329 92.7259 39.6875 63.5 39.6875C34.2741 39.6875 10.5833 51.5329 10.5833 66.1458C10.5833 80.7588 34.2741 92.6042 63.5 92.6042"
+              stroke="#ffffff"
+              stroke-width="10.5833"
+              stroke-linecap="round"
+              stroke-linejoin="round"></path>
+          </svg>
+        </div>
+
+        <div class="moon-cta-wrap">
+          <a href="#register" class="cta-button cta-launch moon-cta-button">Register now</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 01 — WHAT IS AN IPO? -->
+    <section id="what-is" class="section-dark section-tech relative py-32 px-6 overflow-hidden">
+      <div class="grid-bg"></div>
+      <div class="max-w-7xl mx-auto relative">
+        <div class="reveal text-center mx-auto max-w-3xl">
+          <div class="section-focal"></div>
+          <h2 class="section-h2 font-display text-4xl sm:text-5xl font-bold leading-[1.05] tracking-tight text-white">
+            What is an <span class="text-brand-blue-light">IPO</span>?
+          </h2>
+          <p class="section-intro mt-5 text-lg text-white/80 leading-relaxed">
+            An IPO is when a private company sells shares to the public for the first time. It can create hype, volatility, and new market opportunities — but also risk.
+          </p>
+        </div>
+
+        <div class="ipo-journey reveal mt-16">
+          <div class="journey-step">
+            <div class="step-icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="4" y="11" width="16" height="10" rx="2"></rect>
+                <path d="M8 11V7a4 4 0 0 1 8 0v4"></path>
+              </svg>
+            </div>
+            <div class="step-label">Private</div>
+            <div class="mono step-detail">Closed circle</div>
+            <p class="step-desc">Shares are held by founders, employees, and a small circle of investors. No public market, no daily price.</p>
+          </div>
+
+          <div class="journey-arrow">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+              <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </div>
+
+          <div class="journey-step active">
+            <div class="step-icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="4" y="11" width="16" height="10" rx="2"></rect>
+                <path d="M8 11V7a4 4 0 0 1 7.5-2"></path>
+              </svg>
+            </div>
+            <div class="step-label">Public</div>
+            <div class="mono step-detail">Open to anyone</div>
+            <p class="step-desc">Shares trade on an exchange like NYSE or NASDAQ. Anyone can buy or sell. Full disclosure, daily price discovery.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02 — TESLA CASE STUDY -->
+    <section class="section-darker section-tech relative py-32 px-6 overflow-hidden">
+      <div class="grid-bg"></div>
+      <div class="orbit-line orbit-top"></div>
+      <div class="max-w-6xl mx-auto relative">
+        <div class="reveal text-center mb-12">
+          <div class="section-focal"></div>
+          <h2 class="section-h2 font-display text-4xl sm:text-5xl font-bold leading-[1.05] tracking-tight text-white">From Tesla IPO to today</h2>
+        </div>
+
+        <div class="reveal tesla-intro-copy mx-auto text-center">
+          <p class="text-lg text-white/80 leading-relaxed">
+            Tesla went public in <span class="hl">2010 at $17 per share</span>. Since then, the stock has grown dramatically, reaching <span class="hl">over $400 per share</span> at various points after stock-split adjustments and delivering <span class="hl">gains of more than 2,000%</span> from its IPO price.
+          </p>
+          <p class="mt-5 text-lg text-white/80 leading-relaxed">
+            Back then, it was a <span class="hl">risky electric-car company</span>. Today, it is one of the <span class="hl">world's most watched stocks</span>.
+          </p>
+        </div>
+
+        <div class="tesla-stat-card reveal mt-16">
+          <div class="tesla-stat-headline">
+            <div class="tesla-stat-value">+2&nbsp;000%</div>
+            <div class="tesla-stat-caption">Tesla's gain since IPO</div>
+          </div>
+          <div class="tesla-stat-divider" aria-hidden="true"></div>
+          <div class="tesla-stat-line">
+            <span class="tesla-stat-point">
+              <span class="tesla-stat-point-year">2010</span>
+              <span class="tesla-stat-point-price">$17</span>
+            </span>
+            <span class="tesla-stat-arrow" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+            </span>
+            <span class="tesla-stat-point">
+              <span class="tesla-stat-point-year">Today</span>
+              <span class="tesla-stat-point-price">$400+</span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04 — TRAJECTORY -->
+    <section id="stories" class="section-dark section-tech relative py-32 px-6 overflow-hidden">
+      <div class="grid-bg"></div>
+      <div class="max-w-7xl mx-auto relative">
+        <div class="reveal mb-14 text-center">
+          <div class="section-focal"></div>
+          <h2 class="section-h2 font-display text-4xl sm:text-5xl font-bold leading-[1.05] tracking-tight text-white max-w-3xl mx-auto">
+            From starting price to percentage growth
+          </h2>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-6">
+          <article class="reveal tc-card" data-brand="amzn">
+            <div class="tc-card__header">
+              <img class="tc-card__logo" src="https://assets.parqet.com/logos/symbol/AMZN" alt="Amazon" loading="lazy" decoding="async" width="32" height="32" />
+              <span class="tc-card__name">Amazon</span>
+            </div>
+            <div class="tc-card__stat">
+              <div class="tc-card__gain">+928%</div>
+              <div class="tc-card__gain-label">gain since IPO</div>
+            </div>
+            <div class="tc-card__divider" aria-hidden="true"></div>
+            <div class="tc-card__prices">
+              <span class="tc-card__price">
+                <span class="tc-card__price-year">1997</span>
+                <span class="tc-card__price-val">$18</span>
+              </span>
+              <span class="tc-card__arrow" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+              </span>
+              <span class="tc-card__price">
+                <span class="tc-card__price-year">Today</span>
+                <span class="tc-card__price-val">~$185</span>
+              </span>
+            </div>
+          </article>
+
+          <article class="reveal tc-card" data-brand="nvda">
+            <div class="tc-card__header">
+              <img class="tc-card__logo" src="https://assets.parqet.com/logos/symbol/NVDA" alt="Nvidia" loading="lazy" decoding="async" width="32" height="32" />
+              <span class="tc-card__name">Nvidia</span>
+            </div>
+            <div class="tc-card__stat">
+              <div class="tc-card__gain">+7&nbsp;817%</div>
+              <div class="tc-card__gain-label">gain since IPO</div>
+            </div>
+            <div class="tc-card__divider" aria-hidden="true"></div>
+            <div class="tc-card__prices">
+              <span class="tc-card__price">
+                <span class="tc-card__price-year">1999</span>
+                <span class="tc-card__price-val">$12</span>
+              </span>
+              <span class="tc-card__arrow" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+              </span>
+              <span class="tc-card__price">
+                <span class="tc-card__price-year">Today</span>
+                <span class="tc-card__price-val">~$950</span>
+              </span>
+            </div>
+          </article>
+
+          <article class="reveal tc-card" data-brand="meta">
+            <div class="tc-card__header">
+              <img class="tc-card__logo" src="https://assets.parqet.com/logos/symbol/META" alt="Meta" loading="lazy" decoding="async" width="32" height="32" />
+              <span class="tc-card__name">Meta</span>
+            </div>
+            <div class="tc-card__stat">
+              <div class="tc-card__gain">+1&nbsp;216%</div>
+              <div class="tc-card__gain-label">gain since IPO</div>
+            </div>
+            <div class="tc-card__divider" aria-hidden="true"></div>
+            <div class="tc-card__prices">
+              <span class="tc-card__price">
+                <span class="tc-card__price-year">2012</span>
+                <span class="tc-card__price-val">$38</span>
+              </span>
+              <span class="tc-card__arrow" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+              </span>
+              <span class="tc-card__price">
+                <span class="tc-card__price-year">Today</span>
+                <span class="tc-card__price-val">~$500</span>
+              </span>
+            </div>
+          </article>
+        </div>
+
+        <div class="mt-16 text-center reveal">
+          <a href="#register" class="cta-button cta-launch">Register now</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 05 — FAQ -->
+    <section id="faq" class="section-dark section-tech relative py-32 px-6 overflow-hidden">
+      <div class="grid-bg"></div>
+      <div class="max-w-4xl mx-auto relative">
+        <div class="reveal mb-12 text-center">
+          <div class="section-focal"></div>
+          <h2 class="section-h2 font-display text-4xl sm:text-5xl font-bold leading-[1.05] tracking-tight text-white">Frequently asked questions</h2>
+        </div>
+
+        <div class="faq-list">
+          <details class="reveal faq-item" open>
+            <div class="card-corners"></div>
+            <summary>
+              <span class="faq-num mono">Q.01</span>
+              <span class="faq-q">Do I need to wait for the IPO to get started?</span>
+            </summary>
+            <div class="faq-answer">No. You can register now and prepare your strategy before the listing — moving before the crowd is the whole point.</div>
+          </details>
+          <details class="reveal faq-item">
+            <div class="card-corners"></div>
+            <summary>
+              <span class="faq-num mono">Q.02</span>
+              <span class="faq-q">Can I really profit whichever way the IPO goes?</span>
+            </summary>
+            <div class="faq-answer">Through online trading you can open a position in either direction, up or down — the opportunity isn't only in the price going up.</div>
+          </details>
+          <details class="reveal faq-item">
+            <div class="card-corners"></div>
+            <summary>
+              <span class="faq-num mono">Q.03</span>
+              <span class="faq-q">What does 1:200 leverage mean?</span>
+            </summary>
+            <div class="faq-answer">Leverage lets you access a larger position with less starting capital. At up to 1:200, a smaller amount controls a bigger exposure — which raises both the potential gains and the potential losses.</div>
+          </details>
+          <details class="reveal faq-item">
+            <div class="card-corners"></div>
+            <summary>
+              <span class="faq-num mono">Q.04</span>
+              <span class="faq-q">What are "protected positions"?</span>
+            </summary>
+            <div class="faq-answer">A set of positions — up to 15 — designed to reduce your risk exposure as you take your first steps.</div>
+          </details>
+          <details class="reveal faq-item">
+            <div class="card-corners"></div>
+            <summary>
+              <span class="faq-num mono">Q.05</span>
+              <span class="faq-q">I'm just starting out — is the free consult for me?</span>
+            </summary>
+            <div class="faq-answer">Yes. The free 1-on-1 consult is there to answer your questions before you start. No experience needed.</div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-brand-dark border-t border-white/5 pt-12 pb-10 px-6 text-white/50">
+      <div class="max-w-7xl mx-auto">
+        <nav class="footer-links">
+          <a href="#" class="footer-link">Privacy Policy</a>
+          <a href="#" class="footer-link">Contact Us</a>
+          <a href="#" class="footer-link">Terms and Conditions</a>
+        </nav>
+
+        <div class="risk-disclosure">
+          <p>
+            Please read the <a href="#" class="footer-link">Privacy Policy</a> and <a href="#" class="footer-link">Terms and Conditions</a> before continuing. The information provided by the Website is for general information purposes only. We make no representation or warranty of any kind, express or implied, regarding the accuracy, reliability, availability or completeness of any information on the Website. It does not constitute professional advice and one should consider the risks involved before proceeding in online trading. Any use of our Services and any Financial Institution's Services is at your own risk.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    {/* Astro auto-defers + bundles this <script>. Three.js stays out of the
+       initial bundle thanks to dynamic import() inside moon.ts. */}
+    <script>
+      import { initStarfield, initNav, initHeroAnimations, initSegToggle, initStickyMobileCta } from '../scripts/hero';
+      import { initMoon } from '../scripts/moon';
+
+      // Cheap synchronous setup
+      initStarfield();
+      initNav();
+      initSegToggle();
+      initStickyMobileCta();
+
+      // GSAP loads in its own chunk (dynamic import inside initHeroAnimations)
+      initHeroAnimations();
+
+      // Three.js loads only when the moon scrolls near
+      const container = document.getElementById('moonContainer');
+      const stage = document.getElementById('moonStage');
+      if (container && stage) initMoon(container, stage);
+    </script>
+  </body>
+</html>

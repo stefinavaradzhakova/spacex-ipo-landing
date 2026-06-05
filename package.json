@@ -1,0 +1,27 @@
+{
+  "name": "spacex-ipo-astro",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "description": "SpaceX IPO landing — Astro port with compiled Tailwind, lazy-loaded Three.js moon, self-hosted fonts.",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview --port 4321",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "astro": "^5.0.6",
+    "@astrojs/tailwind": "^5.1.4",
+    "tailwindcss": "^3.4.16",
+    "gsap": "^3.12.5",
+    "three": "^0.160.0",
+    "@fontsource/inter": "^5.1.0",
+    "@fontsource/barlow-condensed": "^5.1.0",
+    "@fontsource/space-mono": "^5.1.0"
+  },
+  "devDependencies": {
+    "@types/three": "^0.160.0"
+  }
+}

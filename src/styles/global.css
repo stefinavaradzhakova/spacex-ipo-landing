@@ -69,9 +69,7 @@ body::after {
   border-bottom: 1px solid transparent;
 }
 #nav.scrolled {
-  background: rgba(26, 31, 34, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(26, 31, 34, 0.94);
   border-bottom-color: rgba(255, 255, 255, 0.06);
 }
 .logo-text { color: #fff; }
@@ -97,22 +95,8 @@ body::after {
 .nav-link:hover { color: var(--brand-blue-light); }
 
 /* Language switcher (nav, right side) — neon frame */
-.lang-switcher {
-  display: inline-flex;
-  align-items: center;
-  gap: 2px;
-  padding: 4px;
-  border-radius: 999px;
-  background: rgba(8, 18, 32, 0.55);
-  border: 1.5px solid rgba(91, 186, 230, 0.55);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  box-shadow:
-    0 0 8px rgba(91, 186, 230, 0.35),
-    0 0 18px rgba(91, 186, 230, 0.15),
-    inset 0 0 10px rgba(91, 186, 230, 0.1),
-    inset 0 0 2px rgba(91, 186, 230, 0.35);
-}
+/* .lang-switcher removed from HTML; rule kept minimal in case re-added later. */
+.lang-switcher { display: none; }
 .lang-btn {
   appearance: none;
   border: 0;
@@ -222,7 +206,9 @@ body::after {
   display: flex;
   align-items: center;
   justify-content: center;
-  perspective: 1500px;
+  /* perspective removed — it created a new containing block for any
+     position: fixed descendant (the mobile sticky CTA), which made
+     the sticky button anchor to .moon-stage instead of the viewport. */
 }
 
 .moon-wrapper {
@@ -313,13 +299,11 @@ body::after {
    ================================================================= */
 .float-card {
   position: absolute;
-  width: 230px;
-  padding: 14px 16px;
-  border-radius: 2px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.10);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  width: 340px;
+  padding: 26px 28px;
+  border-radius: 16px;
+  background: rgba(20, 24, 28, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.14);
   z-index: 5;
   opacity: 0;
   transform: translateY(20px);
@@ -328,6 +312,9 @@ body::after {
   display: flex;
   align-items: center;
   gap: 12px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 10px 30px rgba(0, 0, 0, 0.30);
 }
 .card-body { flex: 1; min-width: 0; }
 
@@ -344,31 +331,23 @@ body::after {
 
 .float-card .card-text {
   display: block;
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 1.35;
-  color: rgba(255, 255, 255, 0.94);
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: #ffffff;
+}
+.float-card .card-text .text-brand-blue-light,
+.float-card .card-text strong {
+  color: var(--brand-blue-light);
+  font-weight: 700;
 }
 
 .moon-stage .dark-only { display: none; }
 .moon-stage.is-dark .bright-only { display: none; }
 .moon-stage.is-dark .dark-only { display: block; }
 
-/* BRIGHT state — silver/moonbeam */
-.moon-stage.is-bright .float-card {
-  background: rgba(240, 235, 200, 0.05);
-  border-color: rgba(240, 235, 200, 0.22);
-  box-shadow: 0 0 30px rgba(240, 235, 200, 0.08);
-}
-.moon-stage.is-bright .card-eyebrow { color: var(--brand-beam); }
-
-/* DARK state — brand blue */
-.moon-stage.is-dark .float-card {
-  background: rgba(0, 145, 217, 0.08);
-  border-color: rgba(0, 145, 217, 0.30);
-  box-shadow: 0 0 30px rgba(0, 145, 217, 0.15);
-}
-.moon-stage.is-dark .card-eyebrow { color: var(--brand-blue-light); }
+/* State variants — colors removed to keep all cards a single light grey.
+   Bright vs dark state still toggles content via .bright-only / .dark-only. */
 
 /* Card positions — clustered around the moon's vertical center */
 .card-1 { top: 22%; left: 4%; }
@@ -396,6 +375,72 @@ body::after {
   left: 50%;
   transform: translateX(-50%);
   z-index: 12;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Small instructional hint above the toggle */
+.moon-toggle-hint {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.55);
+  letter-spacing: 0.01em;
+  line-height: 1.45;
+  text-align: center;
+  max-width: 340px;
+}
+@media (min-width: 640px) {
+  .moon-toggle-hint { font-size: 13px; }
+}
+
+/* Click cue — hand pointer centered on the Moon, communicates tap-ability.
+   Lives inside .moon-3d-container so it stays on the Moon on both desktop
+   and the mobile flex-column layout. */
+.moon-click-cue {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 11;
+  pointer-events: none;
+  /* Default safety color; overridden by .is-bright / .is-dark state below */
+  color: #ffffff;
+  transition: color 0.4s ease, filter 0.4s ease;
+}
+/* Bright moon → dark icon (sits on a light surface) */
+.moon-stage.is-bright .moon-click-cue {
+  color: #0a0a0a;
+  filter: drop-shadow(0 1px 2px rgba(255, 255, 255, 0.35));
+}
+/* Dark moon → keep white icon (sits on a dark surface) */
+.moon-stage.is-dark .moon-click-cue {
+  color: #ffffff;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.55));
+}
+.moon-click-cue svg {
+  position: relative;
+  z-index: 2;
+  width: 64px;
+  height: 64px;
+  display: block;
+  transform-origin: center center;
+  /* Pulse is driven by GSAP in script.js so it runs reliably across
+     preview tools and real browsers. */
+}
+@media (prefers-reduced-motion: reduce) {
+  .moon-click-cue svg { animation: none; transform: none !important; opacity: 1 !important; }
+}
+
+/* Smaller hand icon on mobile so it doesn't dominate the smaller moon */
+@media (max-width: 768px) {
+  .moon-click-cue svg {
+    width: 28px;
+    height: 28px;
+  }
 }
 
 /* 360° rotation hint — small white icon, no background, sits just under the Moon (static) */
@@ -414,7 +459,7 @@ body::after {
   width: 28px;
   height: 28px;
   display: block;
-  opacity: 0.85;
+  opacity: 0.5;
 }
 
 /* Register Now CTA — sits inside the moon-stage, lifted higher so the
@@ -427,11 +472,30 @@ body::after {
   transform: translateX(-50%);
   z-index: 10;
 }
-.moon-cta-button {
+/* Hero Register Now CTA — full orange (logo #FF9C00) with soft white halo.
+   Specificity bumped via .cta-button.moon-cta-button so this beats the
+   base .cta-button cyan styling. Mobile rule below overrides this again
+   to the sticky black/white sparkle bar. */
+.cta-button.moon-cta-button {
   font-size: 15px;
   padding: 18px 56px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
+  color: #000000;
+  background: #FF9C00;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  /* 4 layers → 2 layers — same overall feel, half the paint cost. */
+  box-shadow:
+    0 0 36px rgba(255, 255, 255, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.32);
+}
+.cta-button.moon-cta-button:hover {
+  color: #000000;
+  background: #FFA823;
+  border-color: rgba(255, 255, 255, 0.55);
+  box-shadow:
+    0 0 52px rgba(255, 255, 255, 0.50),
+    inset 0 1px 0 rgba(255, 255, 255, 0.45);
 }
 /* =================================================================
    MOON SECTION — MOBILE: stack moon → arrow → cards in flow,
@@ -445,8 +509,8 @@ body::after {
     align-items: center;
     justify-content: flex-start;
     min-height: auto;
-    padding: 8px 16px 16px;
-    gap: 10px;
+    padding: 4px 16px 12px;
+    gap: 0;
   }
 
   /* Mini toggle first */
@@ -456,33 +520,37 @@ body::after {
     left: auto;
     transform: none;
     order: 1;
-    margin: 0 auto;
+    margin: 0 auto 4px;
   }
 
-  /* Moon second */
+  /* Moon second — shrunk to crop the empty canvas space around the sphere
+     and pulled up so the toggle sits close to the moon's top edge. */
   .moon-3d-container {
     position: relative;
     top: auto;
     left: auto;
     transform: none;
-    width: 280px;
-    height: 280px;
+    width: 240px;
+    height: 240px;
     order: 2;
-    margin: 0 auto;
+    margin: -24px auto -32px;
   }
 
-  /* Arrow third — directly under the moon */
+  /* Arrow third — pulled up tight against the moon's bottom */
   .moon-rotation-hint {
     position: relative;
     bottom: auto;
     left: auto;
     transform: none;
     order: 3;
-    margin: 0 auto;
+    margin: 0 auto 4px;
   }
   .moon-rotation-hint svg { width: 22px; height: 22px; }
 
-  /* Float cards fourth — stacked vertically, full-width, compact */
+  /* Float cards fourth — stacked vertically, full-width, compact.
+     Note: we deliberately keep the base opacity:0 + translateY(20)
+     so the GSAP timeline can animate them in after the moon.
+     `animation: none !important` only suppresses the desktop bobble. */
   .float-card {
     position: relative;
     top: auto;
@@ -490,10 +558,8 @@ body::after {
     right: auto;
     width: 100%;
     max-width: 340px;
-    margin: 0 auto;
+    margin: 6px auto 0;
     padding: 12px 14px;
-    opacity: 1;
-    transform: none;
     animation: none !important;
     order: 4;
   }
@@ -505,44 +571,69 @@ body::after {
     animation: none !important;
   }
 
-  /* Sticky Register CTA — fixed at viewport bottom, ~full width with 30px gutters */
+  /* Register CTA — natural position in the moon-stage flex flow.
+     JS (stickyMobileCta in script.js) adds .is-floating while the user
+     is scrolling toward it, which fixes the button at the viewport bottom
+     until the natural position comes into view. Width matches .float-card. */
   .moon-cta-wrap {
-    position: fixed;
-    bottom: 16px;
-    left: 30px;
-    right: 30px;
+    position: relative;
+    bottom: auto;
+    left: auto;
+    right: auto;
     transform: none;
-    z-index: 60;
-    margin: 0;
+    z-index: auto;
+    margin: 14px auto 0;
+    width: 100%;
+    max-width: 340px;
     order: 5;
   }
-  /* Override the neon-cyan look for the sticky button only:
-     dark black bg + thin white border + subtle white sparkle/glow.
-     Specificity bumped via .cta-button.moon-cta-button so this wins
-     over the base .cta-button rule which is later in source order. */
+  /* While floating: reserve the button's natural height in flow,
+     and fix the button itself to the viewport bottom, centered with
+     the same 340px max-width as the float-cards. */
+  .moon-cta-wrap.is-floating {
+    min-height: 60px;
+  }
+  .moon-cta-wrap.is-floating > .cta-button {
+    position: fixed;
+    bottom: 16px;
+    /* Center with left/right + margin auto — NOT transform — so:
+       - GSAP can animate transform without breaking centering
+       - Switching .is-floating on/off doesn't trigger a horizontal slide
+         via the .cta-button transition rule. */
+    left: 24px;
+    right: 24px;
+    margin: 0 auto;
+    width: auto;
+    max-width: 340px;
+    z-index: 60;
+  }
+
+  /* Mobile button — sizing only. Color + 4-layer white halo inherit
+     from the desktop .cta-button.moon-cta-button rule (above this @media)
+     so the orange reads identically on every viewport. */
   .cta-button.moon-cta-button {
     display: block;
     width: 100%;
     text-align: center;
     font-size: 14px;
     padding: 17px 24px;
-    border-radius: 14px;
-    background: rgba(0, 0, 0, 0.9);
-    border: 1px solid rgba(255, 255, 255, 0.85);
-    color: #fff;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    animation: ctaSparkle 3.2s ease-in-out infinite;
+    border-radius: 16px;
+    background: #FF9C00;
+    color: #000000;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    /* 4 layers → 2 layers */
+    box-shadow:
+      0 0 36px rgba(255, 255, 255, 0.32),
+      inset 0 1px 0 rgba(255, 255, 255, 0.32);
   }
   .cta-button.moon-cta-button:hover {
-    background: rgba(10, 10, 10, 0.92);
-    border-color: #fff;
+    background: #FFA823;
+    color: #000000;
+    border-color: rgba(255, 255, 255, 0.55);
     transform: none;
   }
 
-  /* Make room at the bottom of the page so the fixed CTA doesn't sit on top of
-     real content (e.g., footer / register section bottom). */
-  body { padding-bottom: 88px; }
+  body { padding-bottom: 0; }
 }
 
 /* Hero tagline — pops in after the Register button entrance finishes
@@ -566,41 +657,19 @@ body::after {
   }
 }
 
-/* Sticky CTA sparkle — soft white glow that gently pulses, layered to feel like
-   ambient sparkle rather than a flat shadow. */
-@keyframes ctaSparkle {
-  0%, 100% {
-    box-shadow:
-      0 0 10px rgba(255, 255, 255, 0.16),
-      0 0 28px rgba(255, 255, 255, 0.08),
-      inset 0 0 8px rgba(255, 255, 255, 0.04),
-      0 8px 26px rgba(0, 0, 0, 0.55);
-  }
-  50% {
-    box-shadow:
-      0 0 16px rgba(255, 255, 255, 0.30),
-      0 0 44px rgba(255, 255, 255, 0.15),
-      inset 0 0 12px rgba(255, 255, 255, 0.09),
-      0 8px 26px rgba(0, 0, 0, 0.55);
-  }
-}
-
 /* Pill-shaped Light/Dark toggle — neon frame */
 .seg-toggle {
   position: relative;
   display: inline-flex;
   align-items: stretch;
   padding: 5px;
-  background: rgba(8, 18, 32, 0.55);
+  background: rgba(8, 18, 32, 0.85);
   border: 1.5px solid rgba(91, 186, 230, 0.6);
   border-radius: 14px;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
   isolation: isolate;
+  /* 4 layers → 2 layers */
   box-shadow:
-    0 0 10px rgba(91, 186, 230, 0.4),
-    0 0 22px rgba(91, 186, 230, 0.2),
-    inset 0 0 12px rgba(91, 186, 230, 0.12),
+    0 0 18px rgba(91, 186, 230, 0.30),
     inset 0 0 2px rgba(91, 186, 230, 0.4);
 }
 .seg-btn {
@@ -640,9 +709,9 @@ body::after {
   border-radius: 10px;
   background: rgba(91, 186, 230, 0.18);
   border: 1px solid rgba(91, 186, 230, 0.85);
+  /* 3 layers → 2 layers (this only animates the thumb behind the active button) */
   box-shadow:
-    0 0 14px rgba(91, 186, 230, 0.7),
-    0 0 28px rgba(91, 186, 230, 0.3),
+    0 0 20px rgba(91, 186, 230, 0.50),
     inset 0 0 10px rgba(91, 186, 230, 0.3);
   transition: transform 0.35s cubic-bezier(.7, .1, .3, 1);
   z-index: 0;
@@ -650,29 +719,42 @@ body::after {
 }
 .seg-toggle:has(.seg-btn[data-side="dark"].active) .seg-thumb { transform: translateX(100%); }
 
-/* Mini variant — sits directly over the Moon */
+/* Mini variant — pill toggle over the Moon. Dark frosted frame so
+   white inactive text reads cleanly; white sliding thumb behind active. */
 .seg-toggle--mini {
   padding: 3px;
-  border-radius: 11px;
-  /* Inherits neon frame from .seg-toggle; tighten glow slightly for smaller surface */
-  box-shadow:
-    0 0 8px rgba(91, 186, 230, 0.45),
-    0 0 18px rgba(91, 186, 230, 0.22),
-    inset 0 0 10px rgba(91, 186, 230, 0.14),
-    inset 0 0 2px rgba(91, 186, 230, 0.45);
+  border-radius: 999px;
+  background: rgba(10, 14, 20, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: none;
 }
 .seg-toggle--mini .seg-btn {
-  min-width: 68px;
-  padding: 7px 14px;
+  min-width: 138px;
+  padding: 8px 18px;
   font-size: 10px;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.14em;
+  white-space: nowrap;
+  color: rgba(255, 255, 255, 0.78);
+  border-radius: 999px;
+}
+.seg-toggle--mini .seg-btn:hover:not(.active) {
+  color: #ffffff;
+}
+.seg-toggle--mini .seg-btn.active {
+  color: #000;
+  font-weight: 700;
 }
 .seg-toggle--mini .seg-thumb {
   top: 3px;
   bottom: 3px;
   left: 3px;
   width: calc(50% - 3px);
-  border-radius: 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.94);
+  border: none;
+  box-shadow: none;
 }
 
 /* =================================================================
@@ -681,9 +763,8 @@ body::after {
 .stat-card {
   border-radius: 2px;
   padding: 28px;
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(8px);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
 }
 .stat-row {
@@ -789,56 +870,50 @@ body::after {
   align-items: center;
   justify-content: center;
   padding: 16px 36px;
-  border-radius: 14px;
-  background: rgba(8, 18, 32, 0.55);
-  color: #fff;
+  border-radius: 16px;
+  background: #FF9C00;
+  color: #000000;
   font-family: 'Inter', sans-serif;
-  font-weight: 600;
+  font-weight: 700;
   font-size: 13px;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   text-decoration: none;
   cursor: pointer;
-  border: 1.5px solid rgba(91, 186, 230, 0.75);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  /* Was 4 shadow layers — collapsed to 2 to reduce paint cost. */
   box-shadow:
-    0 0 10px rgba(91, 186, 230, 0.45),
-    0 0 28px rgba(91, 186, 230, 0.22),
-    inset 0 0 14px rgba(91, 186, 230, 0.18),
-    inset 0 0 2px rgba(91, 186, 230, 0.5);
+    0 0 32px rgba(255, 255, 255, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.30);
   transition: box-shadow 0.25s ease, border-color 0.25s ease, transform 0.15s ease, background 0.25s ease;
   white-space: nowrap;
 }
 .cta-button:hover {
-  border-color: rgba(149, 217, 255, 1);
-  background: rgba(91, 186, 230, 0.12);
+  color: #000000;
+  background: #FFA823;
+  border-color: rgba(255, 255, 255, 0.55);
   transform: translateY(-2px);
   box-shadow:
-    0 0 18px rgba(91, 186, 230, 0.85),
-    0 0 52px rgba(91, 186, 230, 0.45),
-    inset 0 0 18px rgba(91, 186, 230, 0.28),
-    inset 0 0 3px rgba(149, 217, 255, 0.8);
+    0 0 48px rgba(255, 255, 255, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.45);
 }
 .cta-button:active { transform: translateY(0); transition-duration: 0.1s; }
 
 /* Small variant for nav — tighter glow to match smaller surface */
 .cta-button-sm {
-  padding: 9px 20px;
-  font-size: 13px;
-  border-radius: 10px;
+  padding: 11px 22px;
+  font-size: 12px;
+  border-radius: 14px;
   box-shadow:
-    0 0 8px rgba(91, 186, 230, 0.4),
-    0 0 18px rgba(91, 186, 230, 0.2),
-    inset 0 0 10px rgba(91, 186, 230, 0.14),
-    inset 0 0 2px rgba(91, 186, 230, 0.45);
+    0 0 10px rgba(255, 255, 255, 0.35),
+    0 0 22px rgba(255, 255, 255, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28);
 }
 .cta-button-sm:hover {
   box-shadow:
-    0 0 14px rgba(91, 186, 230, 0.75),
-    0 0 32px rgba(91, 186, 230, 0.4),
-    inset 0 0 12px rgba(91, 186, 230, 0.25),
-    inset 0 0 3px rgba(149, 217, 255, 0.7);
+    0 0 16px rgba(255, 255, 255, 0.55),
+    0 0 36px rgba(255, 255, 255, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.42);
 }
 
 /* Launch variant — larger for final CTA */
@@ -853,26 +928,26 @@ body::after {
 .faq-list { display: flex; flex-direction: column; gap: 14px; }
 .faq-item {
   position: relative;
-  background: linear-gradient(135deg, rgba(91, 186, 230, 0.05), rgba(255, 255, 255, 0.015));
-  border: 1px solid rgba(91, 186, 230, 0.20);
-  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 16px;
   overflow: hidden;
   box-shadow:
-    inset 0 0 40px rgba(0, 145, 217, 0.03),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
     0 8px 24px rgba(0, 0, 0, 0.25);
   transition: border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease, transform 0.3s ease;
 }
 .faq-item:hover {
-  border-color: rgba(0, 145, 217, 0.45);
-  background: linear-gradient(135deg, rgba(0, 145, 217, 0.08), rgba(91, 186, 230, 0.02));
+  border-color: rgba(255, 255, 255, 0.28);
+  background: rgba(255, 255, 255, 0.09);
   transform: translateY(-2px);
   box-shadow:
-    inset 0 0 40px rgba(0, 145, 217, 0.05),
-    0 14px 36px rgba(0, 145, 217, 0.18);
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    0 14px 36px rgba(0, 0, 0, 0.32);
 }
 .faq-item[open] {
-  border-color: rgba(0, 145, 217, 0.65);
-  background: linear-gradient(135deg, rgba(0, 145, 217, 0.10), rgba(0, 145, 217, 0.02));
+  border-color: rgba(255, 255, 255, 0.40);
+  background: rgba(255, 255, 255, 0.10);
   box-shadow:
     inset 0 0 40px rgba(0, 145, 217, 0.06),
     0 16px 40px rgba(0, 145, 217, 0.22);
@@ -1031,6 +1106,145 @@ body::after {
   text-transform: uppercase;
   letter-spacing: 0.005em;
   line-height: 0.95 !important;
+  text-wrap: balance;
+}
+
+/* ----- HERO HEADLINE STACK (Option 1: editorial display) -----
+   "SPACEX IPO" is the main news; the trading line below is supporting copy. */
+.hero-headline-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  max-width: 920px;
+  margin: 0 auto;
+}
+
+/* Tiny mono tag above the headline: · 2026 · NYSE · */
+.hero-meta {
+  font-family: 'Space Mono', ui-monospace, monospace;
+  font-size: 12px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* Massive SpaceX IPO display headline */
+.hero-display {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.28em;
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  font-weight: 800;
+  font-size: clamp(64px, 11.5vw, 132px);
+  line-height: 0.92;
+  letter-spacing: -0.035em;
+  color: #fff;
+  text-wrap: balance;
+}
+.hero-display__word { display: inline-block; }
+/* "SpaceX" — brand-correct casing, no uppercase transform.
+   Tight tracking + heavy weight so it reads like the wordmark. */
+.hero-display__word--brand {
+  text-transform: none;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+}
+/* "IPO" stays uppercase (it's an initialism) and is the orange accent. */
+.hero-display__word--accent {
+  color: #FF9C00;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  /* Soft orange glow so IPO punches even on dark hero */
+  text-shadow:
+    0 0 28px rgba(255, 156, 0, 0.45),
+    0 0 6px rgba(255, 156, 0, 0.55);
+}
+/* Thin orange rule under the headline tying display + subhead together */
+.hero-display__rule {
+  width: 64px;
+  height: 2px;
+  background: #FF9C00;
+  border-radius: 2px;
+  margin-top: 4px;
+  opacity: 0.85;
+}
+
+/* Subhead — was the H1, now the supporting line */
+.hero-subhead {
+  margin: 0;
+  max-width: none;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(18px, 2.2vw, 24px);
+  font-weight: 500;
+  line-height: 1.35;
+  color: rgba(255, 255, 255, 0.86);
+}
+/* Desktop / tablet: keep the line single, no wrap */
+@media (min-width: 760px) {
+  .hero-subhead {
+    white-space: nowrap;
+  }
+}
+/* Mobile: allow wrap so it doesn't overflow narrow screens */
+@media (max-width: 759px) {
+  .hero-subhead {
+    text-wrap: balance;
+    max-width: 92vw;
+  }
+}
+
+/* Legacy hero kicker (kept in case it's referenced elsewhere — hidden so old markup never shows) */
+.hero-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0 auto 22px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: rgba(255, 156, 0, 0.10);
+  border: 1px solid rgba(255, 156, 0, 0.50);
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #FF9C00;
+}
+@media (min-width: 640px) {
+  .hero-kicker { font-size: 13px; }
+}
+.hero-kicker__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: #FF9C00;
+  box-shadow: 0 0 8px rgba(255, 156, 0, 0.85);
+}
+
+/* Blue + heavy accent inside the hero headline */
+.hero-accent {
+  color: var(--brand-blue-light);
+  font-weight: 900;
+}
+
+/* Hero subtitle — smaller plain supporting line above the H1 */
+.hero-subtitle {
+  display: block;
+  margin: 0 auto 18px;
+  max-width: 36rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+  color: rgba(255, 255, 255, 0.70);
+  line-height: 1.55;
+}
+@media (min-width: 640px) {
+  .hero-subtitle { font-size: 17px; }
 }
 
 /* Hide elements user asked to remove
@@ -1041,10 +1255,30 @@ body::after {
 .dot.pulse,
 .section-focal { display: none !important; }
 
-/* Section breathing room — more atmospheric like the Figma reference */
+/* Section breathing room — comfortable but compact */
 .section-tech {
-  padding-top: 9rem !important;
-  padding-bottom: 9rem !important;
+  padding-top: 5.5rem !important;
+  padding-bottom: 5.5rem !important;
+}
+
+/* =================================================================
+   SECTION HEADING POLISH — light typography pass on H2 blocks
+   Tighter tracking + tighter optical leading on large headings,
+   slightly higher body-intro contrast so hierarchy reads cleaner.
+   ================================================================= */
+.section-h2 {
+  font-feature-settings: "ss01", "kern", "liga";
+  text-wrap: balance;            /* keep big headings on balanced lines */
+}
+.section-h2 .text-brand-blue-light {
+  font-weight: 700;              /* match weight so the accent doesn't dip */
+}
+.section-intro {
+  max-width: 38rem;
+  margin-left: auto;
+  margin-right: auto;
+  text-wrap: pretty;             /* avoid orphans on the lede */
+  color: rgba(255, 255, 255, 0.82);
 }
 
 /* SECTION FOCAL ORB — glowing centerpiece above each heading */
@@ -1415,10 +1649,11 @@ body::after {
 .scanner-ring.r-4 { animation: scannerPulse 7.5s ease-in-out infinite 1.2s; }
 
 /* Launch CTA variant */
+/* Big launch variant — same dimensions as the hero Register CTA */
 .cta-launch {
-  padding: 20px 48px;
-  font-size: 17px;
-  letter-spacing: 0.02em;
+  padding: 18px 56px;
+  font-size: 15px;
+  letter-spacing: 0.16em;
 }
 .cta-button .mono { font-size: 14px; }
 
@@ -1548,75 +1783,119 @@ body::after {
 }
 
 /* =================================================================
-   IPO JOURNEY — 4-step process diagram (What is an IPO section)
+   IPO JOURNEY — Private vs Public, two cards with arrow between
+   White/grey palette. Active card (Public) is the destination.
    ================================================================= */
 .ipo-journey {
   display: grid;
-  grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
-  gap: 8px;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 24px;
   align-items: stretch;
+  max-width: 880px;
+  margin: 0 auto;
 }
+
 .journey-step {
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: 26px 16px;
-  border-radius: 2px;
-  background: linear-gradient(135deg, rgba(91, 186, 230, 0.05), rgba(0, 145, 217, 0.02));
-  border: 1px solid rgba(91, 186, 230, 0.20);
-  transition: all 0.3s ease;
+  padding: 36px 28px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 16px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 16px 40px rgba(0, 0, 0, 0.30);
+  transition: transform 0.25s ease, border-color 0.3s ease, background 0.3s ease;
 }
-.journey-step:hover,
+.journey-step:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.28);
+}
+
+/* Active card = destination — slightly brighter border, same grey body */
 .journey-step.active {
-  background: linear-gradient(135deg, rgba(0, 145, 217, 0.12), rgba(0, 145, 217, 0.03));
-  border-color: rgba(0, 145, 217, 0.55);
-  box-shadow: inset 0 0 30px rgba(0, 145, 217, 0.08), 0 12px 30px rgba(0, 145, 217, 0.15);
+  border-color: rgba(255, 255, 255, 0.40);
 }
-.journey-step .step-num {
-  font-size: 11px;
-  letter-spacing: 0.14em;
-  color: var(--brand-blue-light);
-  font-weight: 700;
-  margin-bottom: 14px;
-}
+
+/* Step icon — neutral white/grey */
 .journey-step .step-icon {
-  width: 48px;
-  height: 48px;
+  width: 44px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--brand-blue-light);
-  margin-bottom: 16px;
-  filter: drop-shadow(0 0 12px rgba(0, 145, 217, 0.3));
+  color: rgba(255, 255, 255, 0.60);
+  margin: 0 0 18px;
+  filter: none;
+  transition: color 0.3s ease;
 }
+.journey-step.active .step-icon { color: #ffffff; }
+
+/* Step label — strong white headline */
 .journey-step .step-label {
   font-family: 'Poppins', sans-serif;
-  font-size: 15px;
-  font-weight: 600;
-  color: #fff;
-  margin-bottom: 6px;
+  font-size: 22px;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 8px;
+  letter-spacing: -0.01em;
 }
+
+/* Step detail — mono caps, muted */
 .journey-step .step-detail {
+  font-family: 'Space Mono', monospace;
   font-size: 10px;
-  letter-spacing: 0.16em;
-  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+  margin-bottom: 14px;
 }
+.journey-step.active .step-detail { color: rgba(255, 255, 255, 0.7); }
+
+/* Description — body text inside the card */
+.journey-step .step-desc {
+  margin: 0;
+  max-width: 280px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.62);
+}
+.journey-step.active .step-desc { color: rgba(255, 255, 255, 0.80); }
+
+/* Arrow between the two boxes — visible chevron */
 .journey-arrow {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--brand-blue-light);
-  opacity: 0.55;
+  min-width: 36px;
+  color: rgba(255, 255, 255, 0.40);
 }
+.journey-arrow svg {
+  display: block;
+  width: 26px;
+  height: 26px;
+}
+.journey-arrow::before { display: none; }
 
-@media (max-width: 900px) {
+/* Mobile — stack vertically, rotate arrow down */
+@media (max-width: 768px) {
   .ipo-journey {
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    max-width: 360px;
   }
-  .journey-arrow { display: none; }
+  .journey-arrow {
+    min-width: 0;
+    height: auto;
+    padding: 2px 0;
+  }
+  .journey-arrow svg { transform: rotate(90deg); }
+  .journey-step { padding: 28px 22px; }
 }
 
 /* =================================================================
@@ -1624,13 +1903,270 @@ body::after {
    Thin brand-blue underline (was a rectangle highlight, now a line)
    ================================================================= */
 .hl {
-  color: #fff;
+  color: var(--brand-blue-light);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+/* =================================================================
+   TESLA STAT — single polished card containing everything
+   ================================================================= */
+/* Intro copy width matches the card below, so the column edges line up */
+.tesla-intro-copy {
+  max-width: 680px;
+}
+
+.tesla-stat-card {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 56px 48px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 16px 40px rgba(0, 0, 0, 0.30);
+  text-align: center;
+  position: relative;
+}
+
+.tesla-stat-headline {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.tesla-stat-value {
+  font-family: 'Poppins', sans-serif;
+  font-size: clamp(3rem, 6vw, 4.75rem);
+  font-weight: 800;
+  color: var(--brand-blue-light);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  text-shadow: 0 0 70px rgba(0, 145, 217, 0.35);
+}
+.tesla-stat-caption {
+  margin-top: 28px;
+  font-family: 'Inter', sans-serif;
+  font-size: 17px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.78);
+  letter-spacing: 0.01em;
+}
+
+.tesla-stat-divider {
+  margin: 32px auto 28px;
+  width: 64%;
+  height: 1px;
+  background: linear-gradient(to right,
+    transparent,
+    rgba(91, 186, 230, 0.30) 30%,
+    rgba(91, 186, 230, 0.30) 70%,
+    transparent);
+}
+
+.tesla-stat-line {
+  display: inline-flex;
+  align-items: center;
+  gap: 32px;
+  font-family: 'Inter', sans-serif;
+}
+.tesla-stat-point {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 12px;
+}
+.tesla-stat-point-year {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+}
+.tesla-stat-point-price {
+  font-family: 'Poppins', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+}
+.tesla-stat-arrow {
+  color: var(--brand-blue-light);
+  display: inline-flex;
+  align-items: center;
+}
+.tesla-stat-arrow svg { width: 22px; height: 22px; display: block; }
+
+@media (max-width: 640px) {
+  .tesla-stat-card {
+    padding: 40px 24px;
+    border-radius: 18px;
+  }
+  .tesla-stat-line { gap: 18px; }
+  .tesla-stat-point-price { font-size: 18px; }
+}
+@media (max-width: 420px) {
+  .tesla-stat-line {
+    flex-direction: column;
+    gap: 14px;
+  }
+  .tesla-stat-arrow svg { transform: rotate(90deg); }
+  .tesla-stat-divider { margin: 24px auto 20px; }
+}
+
+/* =================================================================
+   STORIES TRAJECTORY CARDS (#stories) — mirrors the Tesla card pattern
+   ================================================================= */
+.tc-card {
+  position: relative;
+  padding: 36px 28px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 16px 40px rgba(0, 0, 0, 0.30);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.25s ease, border-color 0.3s ease;
+}
+.tc-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(255, 255, 255, 0.28);
+}
+
+.tc-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 26px;
+}
+
+/* Brand logo — actual ticker logo from parqet.com's free CDN
+   (the same source used by many trading apps). 32px round mark. */
+.tc-card__logo {
+  width: 32px;
+  height: 32px;
+  display: inline-block;
+  border-radius: 999px;
+  object-fit: cover;
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 0 18px color-mix(in srgb, var(--tc-brand, white) 30%, transparent);
+}
+
+.tc-card__name {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
   font-weight: 600;
-  text-decoration: underline;
-  text-decoration-color: var(--brand-blue-light);
-  text-decoration-thickness: 1px;
-  text-underline-offset: 5px;
-  text-decoration-skip-ink: none;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+}
+
+/* Brand colors per card */
+.tc-card[data-brand="amzn"] { --tc-brand: #FF9900; }
+.tc-card[data-brand="nvda"] { --tc-brand: #76B900; }
+.tc-card[data-brand="meta"] { --tc-brand: #0866FF; }
+
+/* Subtle brand-color accent stripe at the top of the card */
+.tc-card[data-brand]::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 16%;
+  right: 16%;
+  height: 2px;
+  background: var(--tc-brand);
+  border-radius: 0 0 2px 2px;
+  box-shadow: 0 0 14px var(--tc-brand);
+  opacity: 0.85;
+}
+
+/* The hero gain number adopts the brand color */
+.tc-card[data-brand] .tc-card__gain {
+  color: var(--tc-brand);
+  text-shadow: 0 0 50px color-mix(in srgb, var(--tc-brand) 30%, transparent);
+}
+
+/* And the arrow in the price row */
+.tc-card[data-brand] .tc-card__arrow {
+  color: var(--tc-brand);
+}
+
+/* Hover lifts in the brand color too */
+.tc-card[data-brand]:hover {
+  border-color: color-mix(in srgb, var(--tc-brand) 40%, rgba(255, 255, 255, 0.14));
+}
+
+.tc-card__stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.tc-card__gain {
+  font-family: 'Poppins', sans-serif;
+  font-size: clamp(2.25rem, 3.5vw, 3.25rem);
+  font-weight: 800;
+  color: var(--brand-blue-light);
+  line-height: 0.95;
+  letter-spacing: -0.025em;
+  text-shadow: 0 0 50px rgba(0, 145, 217, 0.30);
+}
+.tc-card__gain-label {
+  margin-top: 18px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.tc-card__divider {
+  margin: 26px auto 22px;
+  width: 70%;
+  height: 1px;
+  background: linear-gradient(to right,
+    transparent,
+    rgba(91, 186, 230, 0.28) 30%,
+    rgba(91, 186, 230, 0.28) 70%,
+    transparent);
+}
+
+.tc-card__prices {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  font-family: 'Inter', sans-serif;
+}
+.tc-card__price {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.tc-card__price-year {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+}
+.tc-card__price-val {
+  font-family: 'Poppins', sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.005em;
+}
+.tc-card__arrow {
+  color: var(--brand-blue-light);
+  display: inline-flex;
+  align-items: center;
+}
+.tc-card__arrow svg { width: 16px; height: 16px; display: block; }
+
+@media (max-width: 640px) {
+  .tc-card { padding: 30px 22px; }
+  .tc-card__prices { gap: 12px; }
 }
 
 /* =================================================================
@@ -1906,47 +2442,60 @@ body::after {
 /* =================================================================
    MOBILE STICKY CTA
    ================================================================= */
-.mobile-sticky-cta {
-  position: fixed;
-  bottom: 18px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 100;
-  display: none;
-}
-.mobile-sticky-cta .cta-button {
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.35),
-    inset 0 -1px 4px rgba(0, 0, 0, 0.20),
-    0 12px 32px rgba(0, 0, 0, 0.40),
-    0 0 0 1px rgba(91, 186, 230, 0.30);
-}
+/* .mobile-sticky-cta — removed (was a leftover duplicate CTA on mobile).
+   The single Register Now button now uses smart-sticky behavior:
+   see .moon-cta-wrap + stickyMobileCta() in script.js. */
 
 /* =================================================================
    RISK DISCLOSURE (footer)
    ================================================================= */
+/* Footer nav links — centered stack (no border) */
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  width: max-content;
+  max-width: 100%;
+  margin: 0 auto 22px;
+  padding: 8px 0;
+}
+.footer-link {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.82);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  text-decoration-color: rgba(255, 255, 255, 0.45);
+  transition: color 0.2s ease;
+}
+.footer-link:hover {
+  color: #ffffff;
+  text-decoration-color: #ffffff;
+}
+
+/* DSPH disclaimer — clean centered long-form note (no border lines) */
 .risk-disclosure {
-  padding: 18px 22px;
-  margin-bottom: 28px;
-  border-radius: 2px;
-  background: rgba(91, 186, 230, 0.04);
-  border: 1px solid rgba(91, 186, 230, 0.14);
-  border-left: 3px solid var(--brand-blue);
-  font-size: 12px;
-  line-height: 1.6;
-  color: rgba(255, 255, 255, 0.55);
+  padding: 8px 0 18px;
+  font-family: 'Inter', sans-serif;
+  font-size: 12.5px;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.68);
+  text-align: center;
+  max-width: 1100px;
+  margin: 0 auto 24px;
 }
-.risk-label {
-  display: block;
-  color: var(--brand-blue-light);
-  margin-bottom: 8px;
-  font-weight: 700;
+.risk-disclosure p { margin: 0; padding: 0 16px; }
+.risk-disclosure .footer-link {
+  font-size: inherit;
 }
-.risk-disclosure p { margin: 0; }
 
 .footer-row {
   padding-top: 24px;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  justify-content: center;
+  text-align: center;
 }
 
 /* =================================================================
@@ -1973,7 +2522,6 @@ body::after {
   }
 }
 @media (max-width: 768px) {
-  .mobile-sticky-cta { display: block; }
 }
 
 /* =================================================================
