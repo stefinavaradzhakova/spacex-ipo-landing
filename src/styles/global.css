@@ -1210,28 +1210,33 @@ body::after {
     white-space: nowrap;
   }
 }
-/* Mobile: allow wrap so it doesn't overflow narrow screens */
+/* Mobile: SpaceX IPO stays on ONE LINE, centered, with 24px (px-6) of
+   horizontal padding — same side margin as every other component on the
+   page (sections, moon stage, cards). Font scales down enough that the
+   headline fits the smallest phone viewport (320px iPhone SE) without
+   overflow or wrap. */
 @media (max-width: 759px) {
   .hero-subhead {
     text-wrap: balance;
     max-width: 92vw;
     text-align: center;
   }
-  /* Hero display headline — shrink to fit narrow screens. The desktop
-     clamp's 64px min was wider than a 360px viewport once SpaceX + IPO
-     + the 0.28em gap were rendered, causing horizontal overflow / clipping.
-     Lower min to 44px + horizontal padding so the headline always fits
-     inside the viewport and stays centered. */
   .hero-display {
-    font-size: clamp(44px, 12vw, 88px);
-    padding: 0 16px;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    gap: 0.18em;
+    font-size: clamp(38px, 11vw, 88px);
+    padding: 0 24px;
     justify-content: center;
     text-align: center;
-    flex-wrap: wrap;
     width: 100%;
     box-sizing: border-box;
+    line-height: 0.95;
   }
-  /* Wrapper — explicit width + centering so nothing escapes the viewport. */
+  .hero-display__word {
+    white-space: nowrap;
+  }
   .hero-headline-stack {
     width: 100%;
     max-width: 100%;
@@ -1239,16 +1244,6 @@ body::after {
     margin-left: auto;
     margin-right: auto;
     text-align: center;
-  }
-}
-/* Very narrow phones — stack the two words vertically so each gets to
-   live large without crowding. */
-@media (max-width: 420px) {
-  .hero-display {
-    flex-direction: column;
-    gap: 4px;
-    line-height: 0.96;
-    font-size: clamp(56px, 16vw, 84px);
   }
 }
 
