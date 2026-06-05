@@ -19,7 +19,8 @@
     "three": "^0.160.0",
     "@fontsource/inter": "^5.1.0",
     "@fontsource/barlow-condensed": "^5.1.0",
-    "@fontsource/space-mono": "^5.1.0"
+    "@fontsource/space-mono": "^5.1.0",
+    "lightningcss": "^1.28.2"
   },
   "devDependencies": {
     "@types/three": "^0.160.0"
