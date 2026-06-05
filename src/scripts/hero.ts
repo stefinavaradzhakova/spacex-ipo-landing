@@ -150,10 +150,6 @@ export function initSegToggle() {
         card.style.opacity = '1';
       }, 320);
     });
-    // Re-arm Three.js auto-rotation so the moon snaps to the bright/dark face
-    // even if the user previously swiped it to an arbitrary angle. moon.ts
-    // listens for this event.
-    window.dispatchEvent(new CustomEvent('moon:resetRotation'));
   }
 
   segs.forEach((s) =>
@@ -163,8 +159,13 @@ export function initSegToggle() {
     }),
   );
 
-  // Moon click-to-toggle removed — rotation is now driven by swipe/drag
-  // (see pointerdown handler in moon.ts). Bright/dark stays on the seg buttons.
+  // Clicking/tapping the Moon itself toggles between bright and dark.
+  const moonHit = document.getElementById('moonContainer');
+  if (moonHit) {
+    moonHit.addEventListener('click', () => {
+      setSide(stage.classList.contains('is-dark') ? 'bright' : 'dark');
+    });
+  }
 }
 
 /* ============= Sticky mobile CTA ============= */

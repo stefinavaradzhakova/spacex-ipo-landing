@@ -104,63 +104,17 @@ export function initMoon(container: HTMLElement, stageEl: HTMLElement) {
       (err) => console.warn('moon.glb failed to load:', err),
     );
 
-    // Swipe-to-rotate state — once the user drags, the moon stays where they
-    // left it (rotation no longer auto-snaps to bright=0 / dark=π). Clicking
-    // a segment button dispatches 'moon:resetRotation' to resume auto-snap.
-    let manualRotation = false;
-    let dragging = false;
-    let lastPointerX = 0;
-
-    container.style.cursor = 'grab';
-    // Let vertical scroll still work; only horizontal drag captures the moon.
-    container.style.touchAction = 'pan-y';
-
-    container.addEventListener('pointerdown', (e) => {
-      dragging = true;
-      manualRotation = true;
-      lastPointerX = e.clientX;
-      container.style.cursor = 'grabbing';
-      try { container.setPointerCapture(e.pointerId); } catch {}
-    });
-    const onPointerMove = (e: PointerEvent) => {
-      if (!dragging) return;
-      const dx = e.clientX - lastPointerX;
-      lastPointerX = e.clientX;
-      // Calibration: container width ≈ full rotation. ~600px swipe = π radians.
-      currentY += (dx / 600) * Math.PI * 2;
-    };
-    const onPointerEnd = (e: PointerEvent) => {
-      dragging = false;
-      container.style.cursor = 'grab';
-      try { container.releasePointerCapture(e.pointerId); } catch {}
-    };
-    container.addEventListener('pointermove', onPointerMove);
-    container.addEventListener('pointerup', onPointerEnd);
-    container.addEventListener('pointercancel', onPointerEnd);
-    container.addEventListener('pointerleave', onPointerEnd);
-
-    // Segment buttons (in hero.ts) re-arm auto-snap so clicking "obvious/hidden"
-    // still rotates the moon to its scripted orientation.
-    window.addEventListener('moon:resetRotation', () => {
-      manualRotation = false;
-    });
-
     let running = false;
     let inView = true;
     function tick() {
       if (!running) return;
       requestAnimationFrame(tick);
       target = stageEl.classList.contains('is-dark') ? SETTINGS.dark : SETTINGS.bright;
-      // Lighting always follows the stage's bright/dark state (controlled by seg buttons).
       sun.position.lerp(target.sunPos, 0.14);
       sun.intensity += (target.sunIntensity - sun.intensity) * 0.14;
       ambient.intensity += (target.ambient - ambient.intensity) * 0.14;
       if (moon) {
-        // Rotation: lerp to target only when user hasn't taken manual control.
-        // Drag overrides; segment-button click resets manualRotation=false.
-        if (!manualRotation) {
-          currentY += (target.rotationY - currentY) * 0.14;
-        }
+        currentY += (target.rotationY - currentY) * 0.14;
         moon.rotation.y = currentY;
         for (let i = 0; i < moonMeshes.length; i++) {
           const m = moonMeshes[i].material as THREE.MeshStandardMaterial;
