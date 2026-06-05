@@ -615,8 +615,8 @@ body::after {
   }
 
   /* Mobile button — uniform sizing across hero CTA AND stories CTA.
-     Both match the bubble width (max 340px), share the same orange + glow,
-     and stay bright in both the floating AND in-flow states (item #5 fix). */
+     Both match the bubble width (max 340px). Color + glow handled below
+     with the strongest selector available. */
   .cta-button.moon-cta-button,
   .cta-button.cta-launch {
     display: block;
@@ -628,31 +628,62 @@ body::after {
     font-size: 14px;
     padding: 17px 24px;
     border-radius: 16px;
-    background: #FF9C00 !important;
-    color: #000000 !important;
     border: 1px solid rgba(255, 255, 255, 0.35);
-    box-shadow:
-      0 0 36px rgba(255, 255, 255, 0.32),
-      inset 0 1px 0 rgba(255, 255, 255, 0.32) !important;
   }
-  .cta-button.moon-cta-button:hover,
-  .cta-button.cta-launch:hover {
-    background: #FFA823 !important;
-    color: #000000 !important;
-    border-color: rgba(255, 255, 255, 0.55);
-    transform: none;
-  }
-  /* Item #5 — explicitly hold the bright orange + white halo when the sticky
-     CTA RELEASES from .is-floating and lands in its natural in-flow position.
-     Without this, cascade order had .cta-button base styles winning briefly. */
+
+  /* HERO BUTTON COLOR FIX — every possible state forces full-saturation orange.
+     Past problem: in the in-flow state the button looked greyish/dim. Causes
+     were a mix of:
+       1) cascade-order: the base .cta-button rule won when not floating
+       2) the box-shadow was only a soft WHITE halo, so against the dark
+          moon-stage in-flow backdrop the orange read as muted vs the
+          floating state (over the body bg) where the halo glowed cleanly
+       3) iOS sticky :hover after tap kept the light-orange hover shade
+     Fixes here:
+       - background-color (not the shorthand) + !important on every state
+       - background-image: none to prevent any gradient sneaking in
+       - ORANGE outer glow added under the white halo so the brand color
+         punches regardless of what sits behind the button
+       - transition removed on background to kill any color animation
+       - hover styles wrapped in @media (hover: hover) so touch devices
+         can't get stuck on the lighter shade after a tap */
+  .moon-cta-wrap > .cta-button.moon-cta-button,
+  .moon-cta-wrap.is-floating > .cta-button.moon-cta-button,
   .moon-cta-wrap:not(.is-floating) > .cta-button.moon-cta-button {
-    background: #FF9C00 !important;
+    background-color: #FF9C00 !important;
+    background-image: none !important;
     color: #000000 !important;
-    box-shadow:
-      0 0 36px rgba(255, 255, 255, 0.32),
-      inset 0 1px 0 rgba(255, 255, 255, 0.32) !important;
     opacity: 1 !important;
     filter: none !important;
+    transition: box-shadow 0.25s ease, border-color 0.25s ease, transform 0.15s ease !important;
+    box-shadow:
+      0 0 24px rgba(255, 156, 0, 0.55),
+      0 0 40px rgba(255, 255, 255, 0.32),
+      inset 0 1px 0 rgba(255, 255, 255, 0.40) !important;
+  }
+
+  /* Stories CTA — same treatment, no .moon-cta-wrap parent. */
+  .cta-button.cta-launch {
+    background-color: #FF9C00 !important;
+    background-image: none !important;
+    color: #000000 !important;
+    transition: box-shadow 0.25s ease, border-color 0.25s ease, transform 0.15s ease !important;
+    box-shadow:
+      0 0 24px rgba(255, 156, 0, 0.55),
+      0 0 40px rgba(255, 255, 255, 0.32),
+      inset 0 1px 0 rgba(255, 255, 255, 0.40) !important;
+  }
+
+  /* Hover state — gated to actual pointing devices only, so iOS doesn't
+     keep the button in :hover after the user releases the tap. */
+  @media (hover: hover) and (pointer: fine) {
+    .moon-cta-wrap > .cta-button.moon-cta-button:hover,
+    .cta-button.cta-launch:hover {
+      background-color: #FFA823 !important;
+      color: #000000 !important;
+      border-color: rgba(255, 255, 255, 0.55);
+      transform: none;
+    }
   }
 
   body { padding-bottom: 0; }
