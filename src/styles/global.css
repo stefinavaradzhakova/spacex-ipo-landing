@@ -1820,7 +1820,11 @@ body::after {
   gap: 24px;
   align-items: stretch;
   max-width: 880px;
-  margin: 0 auto;
+  /* margin-inline only — preserves any margin-top set by Tailwind utility classes
+     (e.g. mt-[84px] for the subtext->images gap). The old `margin: 0 auto`
+     shorthand was silently resetting margin-top to 0. */
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .journey-step {
@@ -1946,7 +1950,10 @@ body::after {
 
 .tesla-stat-card {
   max-width: 680px;
-  margin: 0 auto;
+  /* See .ipo-journey comment — split margin shorthand so utility-class
+     margin-top isn't clobbered to 0. */
+  margin-left: auto;
+  margin-right: auto;
   padding: 56px 48px;
   border-radius: 16px;
   background: rgba(255, 255, 255, 0.07);
