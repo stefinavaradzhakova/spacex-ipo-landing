@@ -1215,12 +1215,40 @@ body::after {
   .hero-subhead {
     text-wrap: balance;
     max-width: 92vw;
+    text-align: center;
   }
-  /* Hero display headline — explicit horizontal padding so "SpaceX" + "IPO"
-     never touch the right edge on narrow viewports (the long X tracking
-     can push the last glyph past 100% width). */
+  /* Hero display headline — shrink to fit narrow screens. The desktop
+     clamp's 64px min was wider than a 360px viewport once SpaceX + IPO
+     + the 0.28em gap were rendered, causing horizontal overflow / clipping.
+     Lower min to 44px + horizontal padding so the headline always fits
+     inside the viewport and stays centered. */
   .hero-display {
+    font-size: clamp(44px, 12vw, 88px);
     padding: 0 16px;
+    justify-content: center;
+    text-align: center;
+    flex-wrap: wrap;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  /* Wrapper — explicit width + centering so nothing escapes the viewport. */
+  .hero-headline-stack {
+    width: 100%;
+    max-width: 100%;
+    padding: 0;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+  }
+}
+/* Very narrow phones — stack the two words vertically so each gets to
+   live large without crowding. */
+@media (max-width: 420px) {
+  .hero-display {
+    flex-direction: column;
+    gap: 4px;
+    line-height: 0.96;
+    font-size: clamp(56px, 16vw, 84px);
   }
 }
 
