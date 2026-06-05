@@ -52,8 +52,18 @@ export function initNav() {
   onScroll();
 }
 
-/* ============= GSAP hero entrance + scroll reveals ============= */
-export async function initHeroAnimations() {
+/* ============= GSAP hero entrance + scroll reveals =============
+   GSAP is heavy (~80 KB parse + execute on slow mobile CPUs). Wait for an
+   idle slot before importing — TBT drops significantly. The hero is fully
+   readable + interactive without animations, so deferring is safe. */
+export function initHeroAnimations() {
+  const idle: (cb: () => void) => void =
+    (window as any).requestIdleCallback?.bind(window) ||
+    ((cb: () => void) => setTimeout(cb, 200));
+  idle(() => void runHeroAnimations());
+}
+
+async function runHeroAnimations() {
   const { gsap } = await import('gsap');
   const { ScrollTrigger } = await import('gsap/ScrollTrigger');
   gsap.registerPlugin(ScrollTrigger);
@@ -140,6 +150,10 @@ export function initSegToggle() {
         card.style.opacity = '1';
       }, 320);
     });
+    // Re-arm Three.js auto-rotation so the moon snaps to the bright/dark face
+    // even if the user previously swiped it to an arbitrary angle. moon.ts
+    // listens for this event.
+    window.dispatchEvent(new CustomEvent('moon:resetRotation'));
   }
 
   segs.forEach((s) =>
@@ -149,12 +163,8 @@ export function initSegToggle() {
     }),
   );
 
-  const moonHit = document.getElementById('moonContainer');
-  if (moonHit) {
-    moonHit.addEventListener('click', () => {
-      setSide(stage.classList.contains('is-dark') ? 'bright' : 'dark');
-    });
-  }
+  // Moon click-to-toggle removed — rotation is now driven by swipe/drag
+  // (see pointerdown handler in moon.ts). Bright/dark stays on the seg buttons.
 }
 
 /* ============= Sticky mobile CTA ============= */

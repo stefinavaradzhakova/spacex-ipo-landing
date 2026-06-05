@@ -75,8 +75,8 @@ body::after {
   border-bottom: 1px solid transparent;
 }
 #nav.scrolled {
-  background: rgba(26, 31, 34, 0.94);
-  border-bottom-color: rgba(255, 255, 255, 0.06);
+  background: #000000;
+  border-bottom-color: rgba(255, 255, 255, 0.08);
 }
 .logo-text { color: #fff; }
 .logo-mark { width: 36px; height: 22px; display: block; }
@@ -614,29 +614,45 @@ body::after {
     z-index: 60;
   }
 
-  /* Mobile button — sizing only. Color + 4-layer white halo inherit
-     from the desktop .cta-button.moon-cta-button rule (above this @media)
-     so the orange reads identically on every viewport. */
-  .cta-button.moon-cta-button {
+  /* Mobile button — uniform sizing across hero CTA AND stories CTA.
+     Both match the bubble width (max 340px), share the same orange + glow,
+     and stay bright in both the floating AND in-flow states (item #5 fix). */
+  .cta-button.moon-cta-button,
+  .cta-button.cta-launch {
     display: block;
     width: 100%;
+    max-width: 340px;
+    margin-left: auto;
+    margin-right: auto;
     text-align: center;
     font-size: 14px;
     padding: 17px 24px;
     border-radius: 16px;
-    background: #FF9C00;
-    color: #000000;
+    background: #FF9C00 !important;
+    color: #000000 !important;
     border: 1px solid rgba(255, 255, 255, 0.35);
-    /* 4 layers → 2 layers */
     box-shadow:
       0 0 36px rgba(255, 255, 255, 0.32),
-      inset 0 1px 0 rgba(255, 255, 255, 0.32);
+      inset 0 1px 0 rgba(255, 255, 255, 0.32) !important;
   }
-  .cta-button.moon-cta-button:hover {
-    background: #FFA823;
-    color: #000000;
+  .cta-button.moon-cta-button:hover,
+  .cta-button.cta-launch:hover {
+    background: #FFA823 !important;
+    color: #000000 !important;
     border-color: rgba(255, 255, 255, 0.55);
     transform: none;
+  }
+  /* Item #5 — explicitly hold the bright orange + white halo when the sticky
+     CTA RELEASES from .is-floating and lands in its natural in-flow position.
+     Without this, cascade order had .cta-button base styles winning briefly. */
+  .moon-cta-wrap:not(.is-floating) > .cta-button.moon-cta-button {
+    background: #FF9C00 !important;
+    color: #000000 !important;
+    box-shadow:
+      0 0 36px rgba(255, 255, 255, 0.32),
+      inset 0 1px 0 rgba(255, 255, 255, 0.32) !important;
+    opacity: 1 !important;
+    filter: none !important;
   }
 
   body { padding-bottom: 0; }
@@ -1199,6 +1215,12 @@ body::after {
   .hero-subhead {
     text-wrap: balance;
     max-width: 92vw;
+  }
+  /* Hero display headline — explicit horizontal padding so "SpaceX" + "IPO"
+     never touch the right edge on narrow viewports (the long X tracking
+     can push the last glyph past 100% width). */
+  .hero-display {
+    padding: 0 16px;
   }
 }
 
