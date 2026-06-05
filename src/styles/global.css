@@ -645,23 +645,28 @@ body::after {
   .moon-cta-wrap.is-floating > .cta-button.moon-cta-button,
   .moon-cta-wrap:not(.is-floating) > .cta-button.moon-cta-button,
   .cta-button.cta-launch {
-    background: #FF9C00 !important;
-    background-color: #FF9C00 !important;
+    /* Brighter orange than #FF9C00 — was reading dim against the
+       moon-stage in-flow backdrop. #FFAA00 lifts the value channel. */
+    background: #FFAA00 !important;
+    background-color: #FFAA00 !important;
     background-image: none !important;
     color: #000000 !important;
     opacity: 1 !important;
     filter: none !important;
-    /* Kill iOS native button styling that paints a subtle vertical gradient */
+    /* Kill iOS native button chrome + tap veil */
     -webkit-appearance: none !important;
             appearance: none !important;
-    /* Kill the dark tap-highlight overlay iOS draws on <a> taps */
     -webkit-tap-highlight-color: transparent !important;
     text-shadow: none !important;
     transition: box-shadow 0.25s ease, border-color 0.25s ease, transform 0.15s ease !important;
-    /* Flat outer halo only — NO inset shadow (was darkening the rim) */
+    /* Three-layer punch: tight yellow core glow, medium orange glow,
+       wide white halo. Restores the "neon" look from the original
+       floating state in BOTH floating and in-flow positions. */
     box-shadow:
-      0 0 18px rgba(255, 156, 0, 0.45),
-      0 0 36px rgba(255, 255, 255, 0.28) !important;
+      0 0 8px rgba(255, 220, 100, 0.7),
+      0 0 28px rgba(255, 170, 0, 0.65),
+      0 0 56px rgba(255, 255, 255, 0.45),
+      inset 0 1px 0 rgba(255, 255, 255, 0.45) !important;
   }
 
   /* Hover state — gated to actual pointing devices only so iOS can't
