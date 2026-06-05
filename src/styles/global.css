@@ -602,12 +602,11 @@ body::after {
   .moon-cta-wrap.is-floating > .cta-button {
     position: fixed;
     bottom: 16px;
-    /* Center with left/right + margin auto — NOT transform — so:
-       - GSAP can animate transform without breaking centering
-       - Switching .is-floating on/off doesn't trigger a horizontal slide
-         via the .cta-button transition rule. */
-    left: 24px;
-    right: 24px;
+    /* 16px gutters match .moon-stage padding so the floating button is
+       EXACTLY the same width as the float-cards above/below it. Previously
+       24px gutters made the floating button narrower than the cards. */
+    left: 16px;
+    right: 16px;
     margin: 0 auto;
     width: auto;
     max-width: 340px;
