@@ -1335,10 +1335,21 @@ body::after {
 .dot.pulse,
 .section-focal { display: none !important; }
 
-/* Section breathing room — comfortable but compact */
+/* Section breathing room — comfortable but compact.
+   Note: !important here used to clobber Tailwind's py-* utilities on
+   the same elements. That meant the `py-16 md:py-32` we set on each
+   section was being silently overridden with 5.5rem (88px) on mobile,
+   producing huge empty bands. Mobile dialed down to 2.5rem (40px) for
+   compact rhythm; desktop stays comfortable at 5.5rem. */
 .section-tech {
-  padding-top: 5.5rem !important;
-  padding-bottom: 5.5rem !important;
+  padding-top: 2.5rem !important;
+  padding-bottom: 2.5rem !important;
+}
+@media (min-width: 768px) {
+  .section-tech {
+    padding-top: 5.5rem !important;
+    padding-bottom: 5.5rem !important;
+  }
 }
 
 /* =================================================================
