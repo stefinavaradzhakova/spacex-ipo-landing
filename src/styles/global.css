@@ -631,51 +631,41 @@ body::after {
     border: 1px solid rgba(255, 255, 255, 0.35);
   }
 
-  /* HERO BUTTON COLOR FIX — every possible state forces full-saturation orange.
-     Past problem: in the in-flow state the button looked greyish/dim. Causes
-     were a mix of:
-       1) cascade-order: the base .cta-button rule won when not floating
-       2) the box-shadow was only a soft WHITE halo, so against the dark
-          moon-stage in-flow backdrop the orange read as muted vs the
-          floating state (over the body bg) where the halo glowed cleanly
-       3) iOS sticky :hover after tap kept the light-orange hover shade
-     Fixes here:
-       - background-color (not the shorthand) + !important on every state
-       - background-image: none to prevent any gradient sneaking in
-       - ORANGE outer glow added under the white halo so the brand color
-         punches regardless of what sits behind the button
-       - transition removed on background to kill any color animation
-       - hover styles wrapped in @media (hover: hover) so touch devices
-         can't get stuck on the lighter shade after a tap */
+  /* HERO BUTTON COLOR FIX — nuclear option.
+     Past attempts left the button looking dim/gradient-y after landing.
+     Likely culprits in the screenshot evidence:
+       - iOS Safari -webkit-appearance applying a native button gradient
+       - -webkit-tap-highlight-color leaving a dark veil after tap
+       - inset box-shadow creating an "edge darkening" perception
+       - sticky :hover after tap
+     Strategy here: strip every iOS/native chrome possible, FLAT orange
+     fill with NO inset shadow (which was creating the dark edges),
+     plain outer halo, and tap-highlight nuked. */
   .moon-cta-wrap > .cta-button.moon-cta-button,
   .moon-cta-wrap.is-floating > .cta-button.moon-cta-button,
-  .moon-cta-wrap:not(.is-floating) > .cta-button.moon-cta-button {
+  .moon-cta-wrap:not(.is-floating) > .cta-button.moon-cta-button,
+  .cta-button.cta-launch {
+    background: #FF9C00 !important;
     background-color: #FF9C00 !important;
     background-image: none !important;
     color: #000000 !important;
     opacity: 1 !important;
     filter: none !important;
+    /* Kill iOS native button styling that paints a subtle vertical gradient */
+    -webkit-appearance: none !important;
+            appearance: none !important;
+    /* Kill the dark tap-highlight overlay iOS draws on <a> taps */
+    -webkit-tap-highlight-color: transparent !important;
+    text-shadow: none !important;
     transition: box-shadow 0.25s ease, border-color 0.25s ease, transform 0.15s ease !important;
+    /* Flat outer halo only — NO inset shadow (was darkening the rim) */
     box-shadow:
-      0 0 24px rgba(255, 156, 0, 0.55),
-      0 0 40px rgba(255, 255, 255, 0.32),
-      inset 0 1px 0 rgba(255, 255, 255, 0.40) !important;
+      0 0 18px rgba(255, 156, 0, 0.45),
+      0 0 36px rgba(255, 255, 255, 0.28) !important;
   }
 
-  /* Stories CTA — same treatment, no .moon-cta-wrap parent. */
-  .cta-button.cta-launch {
-    background-color: #FF9C00 !important;
-    background-image: none !important;
-    color: #000000 !important;
-    transition: box-shadow 0.25s ease, border-color 0.25s ease, transform 0.15s ease !important;
-    box-shadow:
-      0 0 24px rgba(255, 156, 0, 0.55),
-      0 0 40px rgba(255, 255, 255, 0.32),
-      inset 0 1px 0 rgba(255, 255, 255, 0.40) !important;
-  }
-
-  /* Hover state — gated to actual pointing devices only, so iOS doesn't
-     keep the button in :hover after the user releases the tap. */
+  /* Hover state — gated to actual pointing devices only so iOS can't
+     hold the hover orange after the user releases the tap. */
   @media (hover: hover) and (pointer: fine) {
     .moon-cta-wrap > .cta-button.moon-cta-button:hover,
     .cta-button.cta-launch:hover {
