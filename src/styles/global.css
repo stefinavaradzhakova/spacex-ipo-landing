@@ -658,15 +658,18 @@ body::after {
     text-shadow: none !important;
     transition: border-color 0.25s ease, transform 0.15s ease !important;
     box-shadow: none !important;
-    /* z-index above the float-cards (z:5) AND isolate the button into
-       its own stacking context. Without this the float-cards' drop
-       shadow `0 10px 30px rgba(0,0,0,0.30)` projects 30+px downward
-       onto the button area, darkening the orange in the in-flow state
-       (after the sticky CTA lands). The button was technically still
-       #FF9C00 — the dark cast was the card's shadow rendering over it. */
-    position: relative !important;
-    z-index: 10 !important;
-    isolation: isolate !important;
+  }
+
+  /* In-flow state ONLY — lift the button above the float-cards' z:5
+     drop shadow so the card's 0 10px 30px rgba(0,0,0,0.30) doesn't
+     paint a dark cast onto the orange after the sticky CTA lands.
+     Position:relative is SCOPED to the not-floating case so it
+     can't override the floating state's position:fixed (which kept
+     the button anchored to the viewport bottom). */
+  .moon-cta-wrap:not(.is-floating) > .cta-button.moon-cta-button {
+    position: relative;
+    z-index: 10;
+    isolation: isolate;
   }
 
   /* Hover state — gated to actual pointing devices only so iOS can't
