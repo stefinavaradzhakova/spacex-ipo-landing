@@ -1,3 +1,9 @@
+/* Tailwind base + components + utilities — must come BEFORE our custom CSS
+   so our rules can override Tailwind defaults via cascade order. */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
   --brand-blue: #0091D9;
   --brand-blue-light: #5BBAE6;
